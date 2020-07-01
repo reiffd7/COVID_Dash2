@@ -8,7 +8,7 @@ import requests
 import sys
 sys.path.append('../')
 from utils import StatesDataFrame, COORDS, cosine_sim, StateFlags
-from components import existing_vs_new_chart, positive_pct_chart, choropleth_mapbox
+from components import existing_vs_new_chart, positive_pct_chart, choropleth_mapbox, create_cards
 
 with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
@@ -91,4 +91,16 @@ def register_desktop_callbacks(app):
         Input('period-slider', 'value')])
     def map_content(state, period):
         return choropleth_mapbox(state, period)
+
+    @app.callback(
+        Output('sim-states', 'children'),
+        [Input('state_picker', 'value'),
+        Input('period-slider', 'value')]
+    )
+    def sim_states_callback(state, period):
+        if state == 'United States' or state == 'U.S.':
+            return None
+        else:
+            return create_cards(state, period)
+
 

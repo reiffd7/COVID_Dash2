@@ -128,5 +128,8 @@ desktop_body = [
                 )
             )
         ]
+    ),
+    dbc.Row(
+        id='sim-states'
     )
 ]
