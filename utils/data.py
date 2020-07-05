@@ -6,8 +6,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 with open('web_scraping/states.json', 'r') as f:
-    stateAbbrevs = json.load(f)
-stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
+    states = json.load(f)
+stateAbbrevs = {v: k for k,v in states.items()}
 with open('web_scraping/statePop.json', 'r') as f:
     statePops = json.load(f)
 
@@ -32,6 +32,25 @@ ABSOLUTE_RECENT = ['state','inIcuCurrently', 'onVentilatorCurrently',
 ABSOLUTE_TOTAL = ['state','positive', 'negative', 'death']
 
 
+
+class CountiesDataFrame(object):
+
+    def __init__(self):
+        url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
+        self.df = pd.read_csv(url, parse_dates=['date']).sort_index()
+        self.Clean()
+        self.AddCalculatedFields()
+
+
+    def Clean(self):
+        self.df['date'] = pd.to_datetime(self.df['date'])
+        self.df['state'] = self.df['state'].apply(lambda x: states[x])
+        self.df = self.df.dropna(subset=['fips'])
+        self.df['fips'] = self.df['fips'].astype(int)
+
+    def AddCalculatedFields(self):
+        self.df['new positive cases'] = self.df.groupby(['fips'])['cases'].diff(1).fillna(0)
+        self.df['new positive cases (last 7 days)'] = self.df.groupby(['fips'])['new positive cases'].apply(lambda x: x.rolling(7, min_periods=0).sum())
 
 
 

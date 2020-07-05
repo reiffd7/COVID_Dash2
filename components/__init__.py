@@ -1,4 +1,4 @@
-from .existing_vs_new_chart import existing_vs_new_chart
+from .existing_vs_new_chart import existing_vs_new_chart, existing_vs_new_chart_counties
 from .positive_pct_chart import positive_pct_chart
-from .choropleth_mapbox import choropleth_mapbox
+from .choropleth_mapbox import choropleth_mapbox, choropleth_mapbox_counties
 from .sim_states import create_cards

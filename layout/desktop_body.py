@@ -4,6 +4,12 @@ import dash_html_components as html
 import dash_table
 from dash_table.Format import Format
 
+styles = {
+    'pre': {
+        'border': 'thin lightgrey solid',
+        'overflowX': 'scroll'
+    }
+}
 
 desktop_body = [
     dbc.Row(
@@ -124,12 +130,21 @@ desktop_body = [
                             )
                             
                         ]
-                    )
+                    ),
+                    id='map-container'
                 )
             )
         ]
     ),
     dbc.Row(
         id='sim-states'
+    ),
+    dbc.Row(
+        dbc.Col(
+            html.Pre(
+                id='click-data',
+                style = styles['pre']
+            )
+        )
     )
 ]

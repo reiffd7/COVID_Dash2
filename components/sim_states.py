@@ -15,8 +15,8 @@ from utils import StatesDataFrame, StateFlags
 
 
 with open('web_scraping/states.json', 'r') as f:
-    stateAbbrevs = json.load(f)
-stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
+    states = json.load(f)
+stateAbbrevs = {v: k for k,v in states.items()}
 
 def get_top_five_sim(state, period):
     df = pd.read_csv('utils/todays_data.csv')
