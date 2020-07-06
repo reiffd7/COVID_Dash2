@@ -32,13 +32,25 @@ desktop_body = [
                                     ],
                                     style={"height": "10vh"},
                                 
-                            width=4
-                        )
+                            
+                        ),
+                        
                     ]
 
                     )
-                )
+                ),
+                width=2
+            ),
+            dbc.Col(
+                html.Div(
+                    dbc.Row(
+                    id = 'daily-stats'
+                    )
+                ),
+                width=7,
+                style={'padding-left':'10%'}
             )
+            
         ]
     ),
     dbc.Row(
