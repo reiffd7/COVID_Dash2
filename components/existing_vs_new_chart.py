@@ -26,16 +26,16 @@ def human_format(num):
 
 
 
-def existing_vs_new_chart(state, period):
+def existing_vs_new_chart(state, period, data):
 
-    df = pd.read_csv('utils/todays_data.csv')
-    df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
+    # df = pd.read_csv('utils/todays_data.csv')
+    # df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
     # df = df[df['date'] >= '2020-03-01']
     if state == 'United States':
-        data = df.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
+        data = data.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
         data = data.reset_index().sort_values(by='date')
     else:
-        data = df[df['state'] == state]
+        data = data[data['state'] == state]
         data = data[['date', 'positive', 'new positive cases', 'new positive cases (last 7 days)']]
 
     data['new positive in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
@@ -118,20 +118,22 @@ def existing_vs_new_chart(state, period):
     return fig
 
 
-def existing_vs_new_chart_counties(state, county, period):
+def existing_vs_new_chart_counties(state, county, period, county_df, data):
 
-    df = pd.read_csv('utils/todays_data.csv')
-    df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
+    # df = pd.read_csv('utils/todays_data.csv')
+    # df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
 
-    county_df = pd.read_csv('utils/todays_county_data.csv')
-    county_df['date'] = pd.DatetimeIndex(county_df['date']).strftime("%Y-%m-%d")
+    # county_df = pd.read_csv('utils/todays_county_data.csv')
+    # county_df['date'] = pd.DatetimeIndex(county_df['date']).strftime("%Y-%m-%d")
     # df = df[df['date'] >= '2020-03-01']
-    if state == 'United States':
-        data = df.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
-        data = data.reset_index().sort_values(by='date')
-    else:
-        data = df[df['state'] == state]
-        data = data[['date', 'positive', 'new positive cases', 'new positive cases (last 7 days)']]
+    # if state == 'United States':
+    #     data = df.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
+    #     data = data.reset_index().sort_values(by='date')
+    # else:
+    #     data = df[df['state'] == state]
+    #     data = data[['date', 'positive', 'new positive cases', 'new positive cases (last 7 days)']]
+    data = data[data['state'] == state]
+    data = data[['date', 'positive', 'new positive cases', 'new positive cases (last 7 days)']]
 
     county_df = county_df[(county_df['county'] == county) & (county_df['state'] == state)]
     county_data = county_df[['date', 'cases', 'new positive cases', 'new positive cases (last 7 days)']]

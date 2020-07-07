@@ -16,14 +16,17 @@ with open('web_scraping/states.json', 'r') as f:
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
 
+
+
 def register_desktop_callbacks(app):
 
     ## Load latest state and county data
+    
     df = StatesDataFrame().df
     df.to_csv('utils/todays_data.csv')
-
     county_df = CountiesDataFrame().df
     county_df.to_csv('utils/todays_county_data.csv')
+        
     
     ## create the flag based on which state_picker value has been chosen
     @app.callback(
@@ -93,13 +96,19 @@ def register_desktop_callbacks(app):
     @app.callback(
     [Output("existing-vs-new-chart-title", "children")],
     [Input("state_picker", "value"),
-    Input("period-slider", "value")],
+    Input("period-slider", "value"),
+    Input("choropleth", "hoverData")],
     )                                                   # pylint: disable=W0612
-    def confirmed_cases_chart_title_callback(state, period):
-        if state == "U.S.":
-            return ["U.S. Last {} Weeks Cases vs. New Cases".format(period)]
-        else:
-            return ["{} Last {} Weeks Cases vs. New Cases".format(state, period)]
+    def confirmed_cases_chart_title_callback(state, period, hoverData):
+        try:
+            county = hoverData["points"][0]["customdata"][0]
+            return ["{} vs {}: Last {} Weeks Cases vs. New Cases".format(state, county, period)]
+        except:
+            try:
+                state = hoverData["points"][0]["location"]
+                return ["{}: Last {} Weeks Cases vs. New Cases".format(state, period)]
+            except:
+                return ["{}: Last {} Weeks Cases vs. New Cases".format(state, period)]
             
 
     ## existing-vs-new-chart
@@ -123,15 +132,15 @@ def register_desktop_callbacks(app):
         #     return [existing_vs_new_chart(state, period)]
         try:
             county = hoverData["points"][0]["customdata"][0]
-            fig = existing_vs_new_chart_counties(state, county, period)
+            fig = existing_vs_new_chart_counties(state, county, period, county_df, df)
             return [fig]
         except:
             try:
                 state = hoverData["points"][0]["location"]
-                fig = existing_vs_new_chart(state, period)
+                fig = existing_vs_new_chart(state, period, df)
                 return [fig]
             except:
-                return [existing_vs_new_chart(state, period)]
+                return [existing_vs_new_chart(state, period, df)]
             
         # else:
         #     try:
