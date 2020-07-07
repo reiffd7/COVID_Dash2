@@ -138,6 +138,7 @@ desktop_body = [
                                     dcc.Graph(
                                     id="choropleth",
                                     style={"height": "40vh"},
+                                    clear_on_unhover = True
                                 )
                             )
                             
