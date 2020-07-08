@@ -27,7 +27,8 @@ def register_desktop_callbacks(app):
     states = dfOBJ.states
     df.to_csv('utils/todays_data.csv')
     
-    county_df = CountiesDataFrame().df
+    county_dfOBJ = CountiesDataFrame()
+    county_df = county_dfOBJ.df
     county_df.to_csv('utils/todays_county_data.csv')
         
     
