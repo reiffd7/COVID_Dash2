@@ -181,9 +181,9 @@ def register_desktop_callbacks(app):
         Input('period-slider', 'value')])
     def map_content(state, period):
         if state == 'United States' or state == 'U.S.':
-            return choropleth_mapbox(state, period, df)
+            return choropleth_mapbox(state, period)
         else:
-            return choropleth_mapbox_counties(state, period, county_df)
+            return choropleth_mapbox_counties(state, period)
             
     ## similar state cards
     @app.callback(
