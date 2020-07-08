@@ -33,6 +33,7 @@ def positive_pct_chart(state, df):
     df = df[df['date'] >= '2020-04-01']
     if state == 'United States':
         # df = df[df['date'] != '2020-06-11']
+        print('fire')
         data = df.groupby('date').agg({'positive case pct': 'mean'})
         
         data = data.reset_index().sort_values(by='date')
