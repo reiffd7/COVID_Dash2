@@ -26,16 +26,16 @@ def human_format(num):
 
 
 
-def existing_vs_new_chart(state, period, data):
+def existing_vs_new_chart(state, period, df):
 
     # df = pd.read_csv('utils/todays_data.csv')
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
     # df = df[df['date'] >= '2020-04-20']
     if state == 'United States':
-        data = data.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
+        data = df.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
         data = data.reset_index().sort_values(by='date')
     else:
-        data = data[data['state'] == state]
+        data = df[df['state'] == state]
         data = data[['date', 'positive', 'new positive cases', 'new positive cases (last 7 days)']]
 
     data['new positive in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
