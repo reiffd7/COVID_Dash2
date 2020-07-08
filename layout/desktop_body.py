@@ -151,13 +151,13 @@ desktop_body = [
     ),
     dbc.Row(
         id='sim-states'
-    ),
-    dbc.Row(
-        dbc.Col(
-            html.Pre(
-                id='click-data',
-                style = styles['pre']
-            )
-        )
     )
+    # dbc.Row(
+    #     dbc.Col(
+    #         html.Pre(
+    #             id='click-data',
+    #             style = styles['pre']
+    #         )
+    #     )
+    # )
 ]

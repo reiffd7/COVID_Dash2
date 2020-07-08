@@ -26,23 +26,25 @@ def human_format(num):
 
 
 
-def positive_pct_chart(state, period):
+def positive_pct_chart(state, df):
 
-    df = pd.read_csv('utils/todays_data.csv')
+    df = df[(df['positive case pct'] < 1.0) & (df['positive case pct'] >= 0.0)]
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
     df = df[df['date'] >= '2020-04-01']
     if state == 'United States':
-        data = df.groupby('date').agg({'new negative cases': 'sum', 'new positive cases': 'sum', 'new positive cases (last 7 days)':'sum', 'new negative cases (last 7 days)': 'sum', 'positive case pct': 'mean'})
+        # df = df[df['date'] != '2020-06-11']
+        data = df.groupby('date').agg({'positive case pct': 'mean'})
+        
         data = data.reset_index().sort_values(by='date')
     else:
         data = df[df['state'] == state]
-        data = data[['date', 'new negative cases', 'new positive cases', 'new positive cases (last 7 days)', 'new negative cases (last 7 days)', 'positive case pct']]
+        data = data[['date', 'positive case pct']]
 
-    data['positives in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
-    data['negatives in period'] = data['new negative cases'].rolling(period*7, min_periods=0).sum()
-    data['positive pct in period'] = data['positives in period']/(data['positives in period'] + data['negatives in period'])
+    # data['positives in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
+    # data['negatives in period'] = data['new negative cases'].rolling(period*7, min_periods=0).sum()
+    # data['positive pct in period'] = data['positives in period']/(data['positives in period'] + data['negatives in period'])
     ys = data['positive case pct']
-    xs = data['positive pct in period']
+    xs = data['date']
     # length = math.ceil(max(max(ys), max(xs)))
     # annotation_x = length+1
     # annotation_y = length+1
@@ -53,7 +55,7 @@ def positive_pct_chart(state, period):
     for month in monthDict.values():
         monthly_data = data[data['month'] == month]
         ys = monthly_data['positive case pct']
-        xs = monthly_data['positive pct in period']
+        xs = monthly_data['date']
         fig.add_trace(
             go.Scatter(
                 x=xs,
@@ -116,6 +118,10 @@ def positive_pct_chart(state, period):
         yaxis_showgrid=False,
         font=dict(family="Roboto, sans-serif", size=10, color="#f4f4f4"),
         yaxis_title="positive % (last 7 days)",
-        xaxis_title="positive % (last {} days)".format(str(period*7))
+        xaxis = {"title" : {"text" : "Date", "standoff" : 0}}
     )
     return fig
+
+
+
+    

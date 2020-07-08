@@ -48,8 +48,9 @@ def get_daily_stats(state, period):
         positive_rate_color = GREEN
 
     stats = {
-        'Positive Cases (in last 7 days)': [new_positives, round(perc_change, 2), positives_color],
-        'Positive Rate (in last 7 days)': [round(positive_rate,2), round(positive_rate_change*100, 2), positive_rate_color]
+        'Positive Cases (in last 7 days)': [new_positives, perc_change, positives_color],
+        'Positive Rate (in last 7 days)': [positive_rate, positive_rate_change, positive_rate_color],
+        'INFO' : [df['date'].max()]
     }
     return stats
 
@@ -63,7 +64,7 @@ def daily_stats(state, period):
                         dbc.CardBody(
                             [
                                 html.P(
-                                    "{}%".format(value[1]),
+                                    "{}%".format(round(value[1], 0)),
                                     style = {"color": value[2]}
                                 ),
                                 html.H1(
@@ -79,17 +80,43 @@ def daily_stats(state, period):
                     width=4
                 )
             cards.append(card)
+        elif key == 'INFO':
+            card = dbc.Col(
+                    dbc.Col(
+                        dbc.Row(
+                            [
+                                
+                                html.H1(
+                                    "Hover over states to view case growth and positive % graphs.",
+                                    style = {"font-size": "15px"}
+                                ),
+                                html.H1(
+                                    "Hover over counties to view case growth compared to their state.",
+                                    style = {"font-size": "15px"}
+                                ),
+                                html.P(
+                                    "Updated: {}".format(value[0]),
+                                    style = {"font-weight": "bold", "color":"#BB9F06"}
+                                )
+                            ],
+                            
+                        ),
+            
+                    ),
+                    width=4
+            )
+            cards.append(card)
         else:
             card = dbc.Col(
                     dbc.Col(
                         dbc.CardBody(
                             [
                                 html.P(
-                                    "{}%".format(value[1]),
+                                    "{}%".format(round(value[1]*100, 1)),
                                     style = {"color": value[2]}
                                 ),
                                 html.H1(
-                                    f"{value[0]*100}%"
+                                    f"{round(value[0]*100, 1)}%"
                                 ),
                                 html.P(
                                     f"{key}"
