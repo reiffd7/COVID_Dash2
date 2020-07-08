@@ -61,23 +61,7 @@ def register_desktop_callbacks(app):
     def reset_clickData(n_clicks, state):
         return None
 
-    # ## set the state picked based on click data
-    # @app.callback(
-    #     Output('state_picker', 'value'),
-    #     [Input('choropleth', 'clickData')]
-    # )
-    # def update_states(clickData):
-    #     if clickData == None:
-    #         return dash.no_update
-    #     else:
-    #         try:
-    #             test = int(clickData["points"][0]["location"])
-    #             return dash.no_update
-    #         except:
-    #             state = clickData["points"][0]["location"]
-    #             return state
 
-    
     
     ## set the slider output
     @app.callback(
@@ -127,16 +111,6 @@ def register_desktop_callbacks(app):
                 return ["{}: Last {} Weeks Cases vs. New Cases".format(state, period)]
             
 
-    ## existing-vs-new-chart
-    # @app.callback(
-    #     [Output("existing-vs-new", "figure")],
-    #     [Input("state_picker", "value"),
-    #     Input("period-slider", "value")]
-    # )
-    # def existing_vs_new_chart_callback(state, period):
-    #     fig = existing_vs_new_chart(state, period)
-    #     return [fig]
-
     @app.callback(
         [Output("existing-vs-new", "figure")],
         [Input("state_picker", "value"),
@@ -158,23 +132,15 @@ def register_desktop_callbacks(app):
             except:
                 return [existing_vs_new_chart(state, period, df)]
             
-        # else:
-        #     try:
-        #         county = clickData["points"][0]["customdata"][0]
-        #         fig = existing_vs_new_chart_counties(state, county, period)
-        #         return [fig]
-        #     except:
-        #         state = clickData["points"][0]["location"]
-        #         fig = existing_vs_new_chart(state, period)
-        #         return [fig]
-
-    ## positive-pct-chart title
+       
+     ## positive-pct-chart title
     @app.callback(
-    [Output("positive-pct-title", "children")],
-    [Input("state_picker", "value"),
-    Input("choropleth", "hoverData")],
+        [Output("positive-pct-title", "children")],
+        [Input("state_picker", "value"),
+        Input("choropleth", "hoverData")]
     )                                                   # pylint: disable=W0612
     def positive_pct_title_callback(state, hoverData):
+        print('positive pct callback reached')
         original_state = state
         if hoverData == None:
             return ["{}: Positive % Over Time".format(state)]
@@ -185,19 +151,6 @@ def register_desktop_callbacks(app):
             else:
                 return ["{}: Positive % Over Time".format(original_state)]
 
-
-
-
-    # ## positive-pct-chart US ONLY
-    # @app.callback(
-    #     [Output("positive-pct", "figure")],
-    #     [Input("state_picker", "value")]
-    # )
-    # def positive_pct_chart_callback(state):
-    #     if state == 'U.S.' or state == 'United States':
-    #         return [positive_pct_chart(state, df)]
-    #     else:
-    #         dash.no_update
 
     ## positive-pct-chart
     @app.callback(
@@ -244,17 +197,6 @@ def register_desktop_callbacks(app):
             return create_cards(state, period)
 
     
-    ## for printing click data
-    # @app.callback(
-    #     Output('click-data', 'children'),
-    #     [Input('choropleth', 'hoverData')]
-    # )
-    # def display_click_data(clickData):
-    #     return json.dumps(clickData, indent=2)
-
     
-     
-
-        
 
 
