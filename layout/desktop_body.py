@@ -96,7 +96,7 @@ desktop_body = [
                                     dbc.CardBody(
                                         [
                                             html.Div(
-                                                id = "positive-pct-title",
+                                                id = "pospct_title",
                                                 className="bottom-chart-h1-title"
                                             ),
                                             html.Div(
@@ -106,10 +106,9 @@ desktop_body = [
                                             html.Div(
                                                 # dcc.Loading(
                                                     dcc.Graph(
-                                                        id="positive-pct",
+                                                        id="pospct_chart",
                                                         config={"responsive": False},
-                                                        style={"height": "30vh"},
-                                                        className="top-bottom-mid-chart-figure"
+                                                        style={"height": "30vh"}
                                                     ),
                                                 # ),
                                                 id="chart-container"
