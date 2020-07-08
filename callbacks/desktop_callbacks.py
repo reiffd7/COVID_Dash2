@@ -61,6 +61,41 @@ def register_desktop_callbacks(app):
     def reset_clickData(n_clicks, state):
         return None
 
+    ## positive-pct-chart title
+    @app.callback(
+        [Output("positive-pct-title", "children")],
+        [Input("state_picker", "value"),
+        Input("choropleth", "hoverData")]
+    )                                                   # pylint: disable=W0612
+    def positive_pct_title_callback(state, hoverData):
+        print('positive pct callback reached')
+        original_state = state
+        if hoverData == None:
+            return ["{}: Positive % Over Time".format(state)]
+        else:
+            state = hoverData["points"][0]["location"]
+            if state in states:
+                return ["{}: Positive % Over Time".format(state)]
+            else:
+                return ["{}: Positive % Over Time".format(original_state)]
+
+
+    ## positive-pct-chart
+    @app.callback(
+        [Output("positive-pct", "figure")],
+        [Input("state_picker", "value"),
+        Input("choropleth", "hoverData")]
+    )
+    def positive_pct_chart_callback(state, hoverData):
+        original_state = state
+        if hoverData == None:
+            return [positive_pct_chart(state, df)]
+        else:
+            state = hoverData["points"][0]["location"]
+            if state in states:
+                return [positive_pct_chart(state, df)]
+            else:
+                return [positive_pct_chart(original_state, df)]
 
     
     ## set the slider output
@@ -131,46 +166,6 @@ def register_desktop_callbacks(app):
                 return [fig]
             except:
                 return [existing_vs_new_chart(state, period, df)]
-            
-       
-     ## positive-pct-chart title
-    @app.callback(
-        [Output("positive-pct-title", "children")],
-        [Input("state_picker", "value"),
-        Input("choropleth", "hoverData")]
-    )                                                   # pylint: disable=W0612
-    def positive_pct_title_callback(state, hoverData):
-        print('positive pct callback reached')
-        original_state = state
-        if hoverData == None:
-            return ["{}: Positive % Over Time".format(state)]
-        else:
-            state = hoverData["points"][0]["location"]
-            if state in states:
-                return ["{}: Positive % Over Time".format(state)]
-            else:
-                return ["{}: Positive % Over Time".format(original_state)]
-
-
-    ## positive-pct-chart
-    @app.callback(
-        [Output("positive-pct", "figure")],
-        [Input("state_picker", "value"),
-        Input("choropleth", "hoverData")]
-    )
-    def positive_pct_chart_callback(state, hoverData):
-        original_state = state
-        if hoverData == None:
-            return [positive_pct_chart(state, df)]
-        else:
-            state = hoverData["points"][0]["location"]
-            if state in states:
-                return [positive_pct_chart(state, df)]
-            else:
-                return [positive_pct_chart(original_state, df)]
-          
-            
-       
         
 
     ## choropleth map based if a state has been picked or the US
