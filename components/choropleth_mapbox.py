@@ -15,8 +15,8 @@ statesJSON = requests.get('https://raw.githubusercontent.com/python-visualizatio
 
 
 
-def choropleth_mapbox(state, period):
-    df = pd.read_csv('utils/todays_data.csv')
+def choropleth_mapbox(state, period, df):
+   
     mapDf = df[['state', 'date', 'new positive cases (last 7 days)']]
     mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
     mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
@@ -50,10 +50,10 @@ def choropleth_mapbox(state, period):
 
 
 
-def choropleth_mapbox_counties(state, period):
+def choropleth_mapbox_counties(state, period, df):
     with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
         counties = json.load(response)
-    df = pd.read_csv('utils/todays_county_data.csv')
+    # df = pd.read_csv('utils/todays_county_data.csv')
     mapDf = df[['state', 'county', 'date', 'fips', 'new positive cases (last 7 days)']]
     print(mapDf)
     mapDf = mapDf[mapDf['state'] == state]
