@@ -194,14 +194,16 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )
     def positive_pct_chart_callback(state, hoverData):
-        if state == 'United States' or state == 'U.S.':
-            return [positive_pct_chart(state, df)]
-        else:
+        original_state = state
+        try:
             state = hoverData["points"][0]["location"]
             if state in states:
                 return [positive_pct_chart(state, df)]
             else:
-                return dash.no_update
+                return [positive_pct_chart(original_state, df)]
+        except:
+            return [positive_pct_chart(original_state, df)]
+            
        
         
 

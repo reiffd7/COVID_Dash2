@@ -74,14 +74,14 @@ desktop_body = [
                                                 className="bottom-chart-h2-title"
                                             ),
                                             html.Div(
-                                                dcc.Loading(
+                                                # dcc.Loading(
                                                     dcc.Graph(
                                                         id="existing-vs-new",
                                                         config={"responsive": False},
                                                         style={"height": "30vh"},
                                                         className="top-bottom-left-chart-figure"
-                                                    )
-                                                ),
+                                                    ),
+                                                # ),
                                                 id="chart-container"
                                             )
                                         ]
@@ -104,14 +104,14 @@ desktop_body = [
                                                 className="bottom-chart-h2-title"
                                             ),
                                             html.Div(
-                                                dcc.Loading(
+                                                # dcc.Loading(
                                                     dcc.Graph(
                                                         id="positive-pct",
                                                         config={"responsive": False},
                                                         style={"height": "30vh"},
                                                         className="top-bottom-mid-chart-figure"
-                                                    )
-                                                ),
+                                                    ),
+                                                # ),
                                                 id="chart-container"
                                             )
                                         ]
