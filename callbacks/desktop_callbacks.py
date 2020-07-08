@@ -174,18 +174,28 @@ def register_desktop_callbacks(app):
     Input("choropleth", "hoverData")],
     )                                                   # pylint: disable=W0612
     def positive_pct_title_callback(state, hoverData):
-        
-        try:
+        if hoverData == None:
+            return ["{}: Positive % Over Time".format(state)]
+        else:
             state = hoverData["points"][0]["location"]
             if state in states:
-                
                 return ["{}: Positive % Over Time".format(state)]
             else:
                 return dash.no_update
-        except:
-            return ["{}: Positive % Over Time".format(state)]
 
 
+
+
+    # ## positive-pct-chart US ONLY
+    # @app.callback(
+    #     [Output("positive-pct", "figure")],
+    #     [Input("state_picker", "value")]
+    # )
+    # def positive_pct_chart_callback(state):
+    #     if state == 'U.S.' or state == 'United States':
+    #         return [positive_pct_chart(state, df)]
+    #     else:
+    #         dash.no_update
 
     ## positive-pct-chart
     @app.callback(
@@ -194,15 +204,15 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )
     def positive_pct_chart_callback(state, hoverData):
-        
-        try:
+        if hoverData == None:
+            return [positive_pct_chart(state, df)]
+        else:
             state = hoverData["points"][0]["location"]
             if state in states:
                 return [positive_pct_chart(state, df)]
             else:
                 return dash.no_update
-        except:
-            return [positive_pct_chart(state, df)]
+          
             
        
         
