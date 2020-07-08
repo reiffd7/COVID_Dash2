@@ -38,7 +38,6 @@ class CountiesDataFrame(object):
     def __init__(self):
         url = 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv'
         self.df = pd.read_csv(url, parse_dates=['date']).sort_index()
-        print(df)
         self.Clean()
         self.AddCalculatedFields()
 
