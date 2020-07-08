@@ -30,7 +30,7 @@ def existing_vs_new_chart(state, period, data):
 
     # df = pd.read_csv('utils/todays_data.csv')
     # df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
-    # df = df[df['date'] >= '2020-03-01']
+    df = df[df['date'] >= '2020-04-20']
     if state == 'United States':
         data = data.groupby('date').sum()[['positive', 'new positive cases', 'new positive cases (last 7 days)']]
         data = data.reset_index().sort_values(by='date')

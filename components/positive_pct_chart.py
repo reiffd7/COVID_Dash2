@@ -30,7 +30,7 @@ def positive_pct_chart(state, df):
 
     df = df[(df['positive case pct'] < 1.0) & (df['positive case pct'] >= 0.0)]
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
-    df = df[df['date'] >= '2020-04-01']
+    df = df[df['date'] >= '2020-04-20']
     if state == 'United States':
         # df = df[df['date'] != '2020-06-11']
         print('fire')
