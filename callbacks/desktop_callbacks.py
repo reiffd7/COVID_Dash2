@@ -200,7 +200,7 @@ def register_desktop_callbacks(app):
             if state in states:
                 return [positive_pct_chart(state, df)]
             else:
-                dash.no_update
+                return dash.no_update
         except:
             return [positive_pct_chart(state, df)]
             
