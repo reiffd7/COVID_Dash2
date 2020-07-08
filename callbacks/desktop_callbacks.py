@@ -25,11 +25,11 @@ def register_desktop_callbacks(app):
     dfOBJ = StatesDataFrame()
     df = dfOBJ.df
     states = dfOBJ.states
-    df.to_csv('utils/todays_data.csv')
+    df.to_csv('utils/todays_data.csv', index=False)
     
     county_dfOBJ = CountiesDataFrame()
     county_df = county_dfOBJ.df
-    county_df.to_csv('utils/todays_county_data.csv')
+    county_df.to_csv('utils/todays_county_data.csv', index=False)
         
     
     ## create the flag based on which state_picker value has been chosen
@@ -175,6 +175,7 @@ def register_desktop_callbacks(app):
     Input("choropleth", "hoverData")],
     )                                                   # pylint: disable=W0612
     def positive_pct_title_callback(state, hoverData):
+        original_state = state
         if hoverData == None:
             return ["{}: Positive % Over Time".format(state)]
         else:
@@ -182,7 +183,7 @@ def register_desktop_callbacks(app):
             if state in states:
                 return ["{}: Positive % Over Time".format(state)]
             else:
-                return dash.no_update
+                return ["{}: Positive % Over Time".format(original_state)]
 
 
 
@@ -205,6 +206,7 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )
     def positive_pct_chart_callback(state, hoverData):
+        original_state = state
         if hoverData == None:
             return [positive_pct_chart(state, df)]
         else:
@@ -212,7 +214,7 @@ def register_desktop_callbacks(app):
             if state in states:
                 return [positive_pct_chart(state, df)]
             else:
-                return dash.no_update
+                return [positive_pct_chart(original_state, df)]
           
             
        
