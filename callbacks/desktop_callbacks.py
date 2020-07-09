@@ -54,14 +54,14 @@ def register_desktop_callbacks(app):
         else:
             return '{} COVID-19 Analysis'.format(stateAbbrevs[state])
 
-    ## clear click data
-    @app.callback(
-        Output('choropleth', 'clickData'),
-        [Input('map-container', 'n_clicks'),
-        Input('state_picker', 'value')]
-    )
-    def reset_clickData(n_clicks, state):
-        return None
+    # ## clear click data
+    # @app.callback(
+    #     Output('choropleth', 'clickData'),
+    #     [Input('map-container', 'n_clicks'),
+    #     Input('state_picker', 'value')]
+    # )
+    # def reset_clickData(n_clicks, state):
+    #     return None
 
     ## positive-pct-chart title
     @app.callback(
