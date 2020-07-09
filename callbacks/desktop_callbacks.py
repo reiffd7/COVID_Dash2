@@ -70,6 +70,7 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )                                                   # pylint: disable=W0612
     def positive_pct_title_callback(state, hoverData):
+        print('shabba')
         try:
             county = hoverData["points"][0]["customdata"][0]
             return ["{}: Positive % Over Time".format(state)]
