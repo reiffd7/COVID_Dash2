@@ -70,16 +70,25 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )                                                   # pylint: disable=W0612
     def positive_pct_title_callback(state, hoverData):
-        print('positive pct callback reached')
-        original_state = state
-        if hoverData == None:
+        try:
+            county = hoverData["points"][0]["customdata"][0]
             return ["{}: Positive % Over Time".format(state)]
-        else:
-            state = hoverData["points"][0]["location"]
-            if state in states:
+        except:
+            try:
+                state = hoverData["points"][0]["location"]
                 return ["{}: Positive % Over Time".format(state)]
-            else:
-                return ["{}: Positive % Over Time".format(original_state)]
+            except:
+                return ["{}: Positive % Over Time".format(state)]
+        # print('positive pct callback reached')
+        # original_state = state
+        # if hoverData == None:
+        #     return ["{}: Positive % Over Time".format(state)]
+        # else:
+        #     state = hoverData["points"][0]["location"]
+        #     if state in states:
+        #         return ["{}: Positive % Over Time".format(state)]
+        #     else:
+        #         return ["{}: Positive % Over Time".format(original_state)]
 
 
     ## positive-pct-chart
@@ -89,15 +98,24 @@ def register_desktop_callbacks(app):
         Input("choropleth", "hoverData")]
     )
     def positive_pct_chart_callback(state, hoverData):
-        original_state = state
-        if hoverData == None:
+        try:
+            county = hoverData["points"][0]["customdata"][0]
             return [positive_pct_chart(state, df)]
-        else:
-            state = hoverData["points"][0]["location"]
-            if state in states:
+        except:
+            try:
+                state = hoverData["points"][0]["location"]
                 return [positive_pct_chart(state, df)]
-            else:
-                return [positive_pct_chart(original_state, df)]
+            except:
+                return [positive_pct_chart(state, df)]
+        # original_state = state
+        # if hoverData == None:
+        #     return [positive_pct_chart(state, df)]
+        # else:
+        #     state = hoverData["points"][0]["location"]
+        #     if state in states:
+        #         return [positive_pct_chart(state, df)]
+        #     else:
+        #         return [positive_pct_chart(original_state, df)]
 
     
     ## set the slider output
