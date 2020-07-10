@@ -3,7 +3,7 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc    
 import dash_html_components as html
 from layout import build_desktop_layout
-from callbacks import register_routes_callbacks, register_desktop_callbacks
+from callbacks import register_routes_callbacks, register_desktop_callbacks, register_desktop_callacks_data
 
 
 external_stylesheets = [
@@ -30,6 +30,7 @@ app.layout = build_desktop_layout
 
 register_routes_callbacks(app)   
 register_desktop_callbacks(app)
+register_desktop_callacks_data(app)
 
 
 if __name__ == '__main__':

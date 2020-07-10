@@ -11,8 +11,8 @@ GREEN = '#0CCE6B'
 RED = '#B76D68'
 
 
-def get_daily_stats(state, period):
-    df = pd.read_csv('utils/todays_data.csv')
+def get_daily_stats(state, period, df):
+    # df = pd.read_csv('utils/todays_data.csv')
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
 
     if state=='United States':
@@ -54,8 +54,8 @@ def get_daily_stats(state, period):
     }
     return stats
 
-def daily_stats(state, period):
-    stats = get_daily_stats(state, period)
+def daily_stats(state, period, df):
+    stats = get_daily_stats(state, period, df)
     cards = []
     for key, value in stats.items():
         if key == 'Positive Cases (in last 7 days)':

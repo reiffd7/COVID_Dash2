@@ -18,8 +18,8 @@ with open('web_scraping/states.json', 'r') as f:
     states = json.load(f)
 stateAbbrevs = {v: k for k,v in states.items()}
 
-def get_top_five_sim(state, period):
-    df = pd.read_csv('utils/todays_data.csv')
+def get_top_five_sim(state, period, df):
+    # df = pd.read_csv('utils/todays_data.csv')
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
     df = df[['state', 'date', 'new positive cases (last 7 days)', 'positive case pct']]
     df['cases_period'] = df.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
@@ -40,8 +40,8 @@ def get_top_five_sim(state, period):
     sim_df = pd.DataFrame(sim_list).sort_values(by='similarity', ascending=False)
     return sim_df['state'].to_numpy()[:5]
 
-def create_cards(state, period):
-    top_5_states = get_top_five_sim(state, period)
+def create_cards(state, period, df):
+    top_5_states = get_top_five_sim(state, period, df)
     cards = []
     for i, state in enumerate(top_5_states):
         img_url = StateFlags[state]
