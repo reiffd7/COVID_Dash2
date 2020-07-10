@@ -18,7 +18,7 @@ stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
 def register_desktop_callacks_data(app):
     ## Load latest state & county data 
-    
+
     dfOBJ = StatesDataFrame()
     df = dfOBJ.df
     # df = df[df['date'] >= '2020-04-20']
@@ -35,9 +35,10 @@ def register_desktop_callacks_data(app):
     @app.callback(
         [Output("pospct_title", "children")],
         [Input("state_picker", "value"),
+        Input('period-slider', 'value'),
         Input("choropleth", "hoverData")]
     )                                                   # pylint: disable=W0612
-    def positive_pct_title_callback(state, hoverData):
+    def positive_pct_title_callback(state, period, hoverData):
         print('shabba')
         try:
             county = hoverData["points"][0]["customdata"][0]
@@ -54,9 +55,10 @@ def register_desktop_callacks_data(app):
     @app.callback(
         [Output("pospct_chart", "figure")],
         [Input("state_picker", "value"),
+        Input('period-slider', 'value'),
         Input("choropleth", "hoverData")]
     )
-    def positive_pct_chart_callback(state, hoverData):
+    def positive_pct_chart_callback(state, period, hoverData):
         try:
             county = hoverData["points"][0]["customdata"][0]
             return [positive_pct_chart(state, df)]
