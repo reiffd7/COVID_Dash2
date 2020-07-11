@@ -10,8 +10,7 @@ import sys
 sys.path.append('../')
 from utils import StatesDataFrame, CountiesDataFrame, COORDS, cosine_sim, StateFlags
 from components import existing_vs_new_chart, existing_vs_new_chart_counties, positive_pct_chart, choropleth_mapbox, choropleth_mapbox_counties, create_cards, daily_stats
-from credentials.creds import AWS_SERVER_PUBLIC_KEY, AWS_SERVER_SECRET_KEY
-import boto3
+
 with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
