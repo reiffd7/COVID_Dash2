@@ -44,7 +44,7 @@ def create_cards(state, period, df):
     top_5_states = get_top_five_sim(state, period, df)
     cards = []
     for i, state in enumerate(top_5_states):
-        img_url = StateFlags[state]
+        img_url = 'https://dynamic-covid19-analysis.s3.us-east-2.amazonaws.com/{}.png'.format(state)
         entry = dbc.Col(
                 html.Div(
                     dbc.Card(
