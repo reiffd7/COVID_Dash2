@@ -29,7 +29,13 @@ def register_desktop_callbacks(app):
         if state == 'United States' or state == 'U.S.':
             return 'https://www.nationsonline.org/flags_big/United_States_lgflag.gif'
         else:
-            return StateFlags[state]
+            try:
+                print(state)
+                url = 'utils/state_imgs/{}.png'.format(state)
+                print(url.format(state))
+                return url.format(state)
+            except:
+                return None
 
     ## set the title of the page
     @app.callback(

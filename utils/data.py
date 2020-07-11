@@ -213,5 +213,5 @@ def cosine_sim(state, sim_criteria):
     return simDf.head(10)
 
 
-StateFlags = {k: 'https://www.nationsonline.org/flags_big/{}_state_flag.jpg'.format(v.replace(' ', '_')) for k,v in stateAbbrevs.items()}
+StateFlags = {k: 'https://geology.com/state-map/maps/{}-county-map.gif'.format(v.replace(' ', '-').lower()) for k,v in stateAbbrevs.items()}
 StateFlags['DC'] = 'https://cdn.britannica.com/94/4994-004-F06634D5/Flag-District-of-Columbia.jpg'
