@@ -33,6 +33,8 @@ def register_desktop_callbacks(app):
             try:
                 print(state)
                 url = 'https://dynamic-covid19-analysis.s3.us-east-2.amazonaws.com/{}.png'.format(state)
+                if state == 'DC':
+                    url = 'https://cdn.britannica.com/94/4994-004-F06634D5/Flag-District-of-Columbia.jpg'
                 print(url.format(state))
                 return url.format(state)
             except:
