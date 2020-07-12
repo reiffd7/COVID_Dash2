@@ -80,16 +80,18 @@ def register_desktop_callacks_data(app):
     def daily_stats_callback(state, period, hoverData):
         original_state = state
         try:
-            
-            state = hoverData["points"][0]["location"]
-            if state in states:
-                return daily_stats(state, period, df)
-            else:
-                return daily_stats(original_state, period, df)
-            
+            county = hoverData["points"][0]["customdata"][0]
+            return daily_stats(county, state, period, df, county_df)
         except:
-            return daily_stats(original_state, period, df)
-
+            try:
+                county = None
+                state = hoverData["points"][0]["location"]
+                if state in states:
+                    return daily_stats(county, state, period, df, county_df)
+            except:
+                county = None
+                return daily_stats(county, original_state, period, df, county_df)
+            
 
     ## existing-vs-new-chart title
     @app.callback(
