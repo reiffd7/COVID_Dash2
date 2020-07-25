@@ -74,14 +74,14 @@ desktop_body = [
                                                 className="bottom-chart-h2-title"
                                             ),
                                             html.Div(
-                                                # dcc.Loading(
+                                                dcc.Loading(
                                                     dcc.Graph(
                                                         id="existing-vs-new",
                                                         config={"responsive": False},
                                                         style={"height": "30vh"},
                                                         className="top-bottom-left-chart-figure"
                                                     ),
-                                                # ),
+                                                ),
                                                 id="chart-container"
                                             )
                                         ]
@@ -104,13 +104,13 @@ desktop_body = [
                                                 className="bottom-chart-h2-title"
                                             ),
                                             html.Div(
-                                                # dcc.Loading(
+                                                dcc.Loading(
                                                     dcc.Graph(
                                                         id="pospct_chart",
                                                         config={"responsive": False},
                                                         style={"height": "30vh"}
                                                     ),
-                                                # ),
+                                                ),
                                                 id="chart-container"
                                             )
                                         ]
@@ -134,10 +134,12 @@ desktop_body = [
                     dbc.CardBody(
                         [
                             html.Div(
+                                dcc.Loading(
                                     dcc.Graph(
                                     id="choropleth",
                                     style={"height": "40vh"},
                                     clear_on_unhover = True
+                                )
                                 )
                             )
                             
@@ -150,13 +152,14 @@ desktop_body = [
     ),
     dbc.Row(
         id='sim-states'
+    ),
+    dbc.Row(
+        dbc.Col(
+            [html.Button('Find My Location', id='input-on-submit', n_clicks=0),
+            html.Pre(
+                id='ip-data',
+                style = styles['pre']
+            )]
+        )
     )
-    # dbc.Row(
-    #     dbc.Col(
-    #         html.Pre(
-    #             id='click-data',
-    #             style = styles['pre']
-    #         )
-    #     )
-    # )
 ]

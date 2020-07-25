@@ -3,8 +3,10 @@ import dash_table
 from dash_table.Format import Format
 import dash
 import plotly.express as px
+import dash_html_components as html 
 import json
 import requests
+from flask import request
 
 import sys
 sys.path.append('../')
@@ -29,15 +31,7 @@ def register_desktop_callbacks(app):
         if state == 'United States' or state == 'U.S.':
             return 'https://www.nationsonline.org/flags_big/United_States_lgflag.gif'
         else:
-            try:
-                print(state)
-                url = 'https://dynamic-covid19-analysis.s3.us-east-2.amazonaws.com/{}.png'.format(state)
-                if state == 'DC':
-                    url = 'https://cdn.britannica.com/94/4994-004-F06634D5/Flag-District-of-Columbia.jpg'
-                print(url.format(state))
-                return url.format(state)
-            except:
-                return None
+            return StateFlags[state]
 
     ## set the title of the page
     @app.callback(
@@ -58,5 +52,15 @@ def register_desktop_callbacks(app):
     )
     def get_slider_value(value):
         return '{} weeks'.format(value)
+
+    ## get IP address
+    @app.callback(
+        Output('ip-data', 'children'),
+        [Input('input-on-submit', 'value')]
+    )
+    def get_ip(value):
+        return html.Div(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)   
+)
+
 
    
