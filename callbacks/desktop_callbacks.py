@@ -60,8 +60,7 @@ def register_desktop_callbacks(app):
         [Input('input-on-submit', 'value')]
     )
     def get_ip(value):
-        g = geocoder.ip('me')
-        return html.Div(g.latlng)   
+        return html.Div(request.remote_addr)   
 
 
 
