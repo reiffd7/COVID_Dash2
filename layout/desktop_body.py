@@ -155,7 +155,7 @@ desktop_body = [
     ),
     dbc.Row(
         dbc.Col(
-            [html.Button('Find My Location', id='input-on-submit', n_clicks=0),
+            [html.Button('Find My Location', id='input-on-submit'),
             html.Pre(
                 id='ip-data',
                 style = styles['pre']

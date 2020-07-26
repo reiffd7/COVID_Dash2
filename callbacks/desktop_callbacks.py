@@ -9,7 +9,6 @@ import requests
 from flask import request
 import urllib3.request
 import geocoder
-from requests import get
 
 import sys
 sys.path.append('../')
@@ -19,6 +18,15 @@ from components import existing_vs_new_chart, existing_vs_new_chart_counties, po
 with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
+
+try:
+    IP = request.headers['X-Forwarded-For']
+    url = 'http://ip-api.com/json/{}'.format(IP)
+    r = requests.get(url).json()
+    LAT, LON = r['lat'], r['lon']
+except:
+    IP = 'Not Found'
+    LAT, LON = 'NA', 'NA'
 
 
 
@@ -59,10 +67,16 @@ def register_desktop_callbacks(app):
     ## get IP address
     @app.callback(
         Output('ip-data', 'children'),
-        [Input('input-on-submit', 'value')]
+        [Input('input-on-submit', 'n_clicks')]
     )
-    def get_ip(value):
-        return html.Div(request.headers['X-Forwarded-For'])
+    def get_ip(n_clicks):
+        if n_clicks == None:
+            return n_clicks
+        if n_clicks%2 == 1:
+            if LAT == 'NA':
+                return 'Location Not Available'
+            else:
+                return LAT, LON
 
 
    
