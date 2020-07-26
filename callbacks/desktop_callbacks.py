@@ -62,7 +62,7 @@ def register_desktop_callbacks(app):
         [Input('input-on-submit', 'value')]
     )
     def get_ip(value):
-        return html.Div(request.environ['REMOTE_ADDR'])
+        return html.Div(request.headers['X-Forwarded-For'])
 
 
    
