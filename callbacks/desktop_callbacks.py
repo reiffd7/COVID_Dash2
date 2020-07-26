@@ -7,6 +7,7 @@ import dash_html_components as html
 import json
 import requests
 from flask import request
+import urllib.request
 import geocoder
 from requests import get
 
@@ -61,9 +62,8 @@ def register_desktop_callbacks(app):
         [Input('input-on-submit', 'value')]
     )
     def get_ip(value):
-        ip = get('https://api.ipify.org').text
-        return html.Div(ip)   
-
+        external_ip = urllib.request.urlopen('https://ident.me').read().decode('utf8')
+        return html.Div(external_ip)
 
 
    
