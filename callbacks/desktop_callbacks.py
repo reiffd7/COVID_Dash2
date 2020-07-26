@@ -8,6 +8,7 @@ import json
 import requests
 from flask import request
 import geocoder
+from requests import get
 
 import sys
 sys.path.append('../')
@@ -60,7 +61,8 @@ def register_desktop_callbacks(app):
         [Input('input-on-submit', 'value')]
     )
     def get_ip(value):
-        return html.Div(request.remote_addr)   
+        ip = get('https://api.ipify.org').text
+        return html.Div(ip)   
 
 
 
