@@ -20,7 +20,7 @@ with open('web_scraping/states.json', 'r') as f:
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
 try:
-    IP = request.headers['X-Forwarded-For']
+    IP = request.META.get('HTTP_X_REAL_IP')
 except:
     IP = 'Not Found'
 
