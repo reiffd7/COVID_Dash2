@@ -21,12 +21,17 @@ stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
 try:
     IP = request.headers['X-Forwarded-For']
-    url = 'http://ip-api.com/json/{}'.format(IP)
-    r = requests.get(url).json()
-    LAT, LON = r['lat'], r['lon']
 except:
     IP = 'Not Found'
-    LAT, LON = 'NA', 'NA'
+
+print('IP')
+    
+
+try:
+    url = 'http://ip-api.com/json/{}'.format(IP)
+    r = requests.get(url).json()
+except:
+    r = "location not found"
 
 
 
@@ -73,10 +78,7 @@ def register_desktop_callbacks(app):
         if n_clicks == None:
             return n_clicks
         if n_clicks%2 == 1:
-            if LAT == 'NA':
-                return 'Location Not Available'
-            else:
-                return LAT, LON
+            return [IP, r]
 
 
    
