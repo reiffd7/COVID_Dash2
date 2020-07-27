@@ -141,10 +141,10 @@ def register_desktop_callacks_data(app):
         Input('period-slider', 'value'),
         Input('input-on-submit', 'n_clicks')])
     def map_content(state, period, n_clicks):
-        lat, lon = 0, 0
+        lat, long = 0, 0
         if n_clicks == None:
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, lon)
+                return choropleth_mapbox(state, period, df, lat, long)
             else:
                 return choropleth_mapbox_counties(state, period, county_df)
         if n_clicks%2 == 1:
@@ -161,12 +161,12 @@ def register_desktop_callacks_data(app):
             except:
                 rop = "location not found"
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, lon)
+                return choropleth_mapbox(state, period, df, lat, long)
             else:
                 return choropleth_mapbox_counties(state, period, county_df)
         else:
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, lon)
+                return choropleth_mapbox(state, period, df, lat, long)
             else:
                 return choropleth_mapbox_counties(state, period, county_df)
             
