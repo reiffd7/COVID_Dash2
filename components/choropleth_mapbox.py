@@ -17,8 +17,8 @@ statesJSON = requests.get('https://raw.githubusercontent.com/python-visualizatio
 
 
 def choropleth_mapbox(state, period, df, lati, long):
-    print(lati, long)
-    # lati, long = 45.5017, -73.5673
+    # print(lati, long)
+    lati, long = 45.5017, -73.5673
     # df = pd.read_csv('todays_data.csv')
     mapDf = df[['state', 'date', 'new positive cases (last 7 days)']]
     mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
@@ -57,8 +57,10 @@ def choropleth_mapbox(state, period, df, lati, long):
         fig.add_trace(go.Scattermapbox(
             lat=[lati],
             lon=[long],
+            mode='markers+text',
             text=['My Current Location'],
-            mode='markers',
+            textposition = "bottom right",
+            hoverinfo = 'none',
             marker=go.scattermapbox.Marker(
             size=12,
             color='rgb(238, 198, 67)',
