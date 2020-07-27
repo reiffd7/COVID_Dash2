@@ -24,14 +24,14 @@ try:
 except:
     IP = 'Not Found'
 
-print('IP')
+print(IP)
     
 
 try:
     url = 'http://ip-api.com/json/{}'.format(IP)
-    r = requests.get(url).json()
+    rop = requests.get(url).json()
 except:
-    r = "location not found"
+    rop = "location not found"
 
 
 
@@ -76,9 +76,10 @@ def register_desktop_callbacks(app):
     )
     def get_ip(n_clicks):
         if n_clicks == None:
-            return n_clicks
+            return None
         if n_clicks%2 == 1:
-            return [IP, r]
-
+            return html.Div([IP, str(rop)])
+        else:
+            return None
 
    
