@@ -19,19 +19,10 @@ with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
-try:
-    IP = request.META.get('HTTP_X_REAL_IP')
-except:
-    IP = 'Not Found'
 
-print(IP)
     
 
-try:
-    url = 'http://ip-api.com/json/{}'.format(IP)
-    rop = requests.get(url).json()
-except:
-    rop = "location not found"
+
 
 
 
@@ -78,6 +69,19 @@ def register_desktop_callbacks(app):
         if n_clicks == None:
             return None
         if n_clicks%2 == 1:
+            try:
+                IP = request.headers['X-Forwarded-For'] 
+            except:
+                IP = 'Not Found'
+
+            print(IP)
+            try:
+                url = 'http://ip-api.com/json/{}'.format(IP)
+                rop = requests.get(url).json()
+            except:
+                rop = "location not found"
+
+
             return html.Div([IP, str(rop)])
         else:
             return None
