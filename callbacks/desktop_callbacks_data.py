@@ -5,7 +5,7 @@ import dash
 import plotly.express as px
 import json
 import requests
-
+from flask import request
 import sys
 sys.path.append('../')
 from utils import StatesDataFrame, CountiesDataFrame, COORDS, cosine_sim, StateFlags
@@ -141,10 +141,36 @@ def register_desktop_callacks_data(app):
         Input('period-slider', 'value'),
         Input('input-on-submit', 'n_clicks')])
     def map_content(state, period, n_clicks):
-        if state == 'United States' or state == 'U.S.':
-            return choropleth_mapbox(state, period, df, n_clicks)
+        lat, lon = 0, 0
+        if n_clicks == None:
+            if state == 'United States' or state == 'U.S.':
+                return choropleth_mapbox(state, period, df, lat, lon)
+            else:
+                return choropleth_mapbox_counties(state, period, county_df)
+        if n_clicks%2 == 1:
+            try:
+                IP = request.headers['X-Forwarded-For'] 
+            except:
+                IP = 'Not Found'
+
+            print(IP)
+            try:
+                url = 'http://ip-api.com/json/{}'.format(IP)
+                rop = requests.get(url).json()
+                lat, long = rop['lat'], rop['lon']
+            except:
+                rop = "location not found"
+            if state == 'United States' or state == 'U.S.':
+                return choropleth_mapbox(state, period, df, lat, lon)
+            else:
+                return choropleth_mapbox_counties(state, period, county_df)
         else:
-            return choropleth_mapbox_counties(state, period, county_df)
+            if state == 'United States' or state == 'U.S.':
+                return choropleth_mapbox(state, period, df, lat, lon)
+            else:
+                return choropleth_mapbox_counties(state, period, county_df)
+            
+            
 
 
 
