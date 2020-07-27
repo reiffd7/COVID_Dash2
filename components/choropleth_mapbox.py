@@ -1,6 +1,7 @@
 from dash.dependencies import Input, Output
 import numpy as np
 import plotly.express as px
+import plotly.graph_objects as go
 import requests
 import pandas as pd 
 from urllib.request import urlopen
@@ -15,13 +16,14 @@ statesJSON = requests.get('https://raw.githubusercontent.com/python-visualizatio
 
 
 
-def choropleth_mapbox(state, period, df):
+def choropleth_mapbox(state, period, df, n_clicks):
     # df = pd.read_csv('todays_data.csv')
     mapDf = df[['state', 'date', 'new positive cases (last 7 days)']]
     mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
     mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
     mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
     mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
+    
     if state == 'United States':
         fig = px.choropleth_mapbox(mapLatest,
             geojson = statesJSON,
@@ -48,6 +50,36 @@ def choropleth_mapbox(state, period, df):
             mapbox_style = 'carto-darkmatter'
             )
         fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, mapbox= dict(accesstoken = 'pk.eyJ1IjoicmVpZmZkIiwiYSI6ImNrOHFjaXlmOTAyaW0zamp6ZzI4NmtmMTQifQ.4EOhJ5NJJpawQnnoBXGCkw'))
+    try:
+        if n_clicks%2 == 1:
+            try:
+                IP = request.headers['X-Forwarded-For'] 
+            except:
+                IP = 'Not Found'
+
+            print(IP)
+            try:
+                url = 'http://ip-api.com/json/{}'.format(IP)
+                rop = requests.get(url).json()
+                lati, long = rop['lat'], rop['lon']
+                # lati, long = rop['lat'], rop['lon']
+                fig.add_trace(go.Scattermapbox(
+                    lat=[lati],
+                    lon=[long],
+                    mode='markers',
+                    marker=go.scattermapbox.Marker(
+                    size=12,
+                    color='rgb(238, 198, 67)',
+                    opacity=0.7
+        ),
+                ))
+            except:
+                rop = "location not found"
+                print(rop)
+    except:
+        print("n_clicks is None")
+
+
     return fig
 
 

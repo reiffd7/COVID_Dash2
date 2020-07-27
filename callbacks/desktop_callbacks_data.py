@@ -138,10 +138,11 @@ def register_desktop_callacks_data(app):
     @app.callback(
         Output('choropleth', 'figure'),
         [Input('state_picker', 'value'),
-        Input('period-slider', 'value')])
-    def map_content(state, period):
+        Input('period-slider', 'value'),
+        Input('input-on-submit', 'n_clicks')])
+    def map_content(state, period, n_clicks):
         if state == 'United States' or state == 'U.S.':
-            return choropleth_mapbox(state, period, df)
+            return choropleth_mapbox(state, period, df, n_clicks)
         else:
             return choropleth_mapbox_counties(state, period, county_df)
 
