@@ -61,7 +61,7 @@ def register_desktop_callacks_data(app):
     def positive_pct_chart_callback(state, period, hoverData):
         try:
             county = hoverData["points"][0]["customdata"][0]
-            return [positive_pct_chart(state, df)]
+            return dash.no_update
         except:
             try:
                 state = hoverData["points"][0]["location"]
