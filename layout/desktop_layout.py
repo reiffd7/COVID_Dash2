@@ -14,6 +14,7 @@ build_desktop_layout = html.Div(
             color="#010915",
             dark=True,
             className="desktop-navbar",
+            sticky="top"
         ),
         dbc.Container(
             id="page-content",

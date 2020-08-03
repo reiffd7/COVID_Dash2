@@ -58,7 +58,7 @@ def register_desktop_callbacks(app):
         [Input('period-slider', 'value')]
     )
     def get_slider_value(value):
-        return '{} weeks'.format(value)
+        return '{} week comparison'.format(value)
 
     ## get IP address
     @app.callback(

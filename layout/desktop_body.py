@@ -14,33 +14,33 @@ styles = {
 desktop_body = [
     dbc.Row(
         [
-            dbc.Col(
-                html.Div(
-                    dbc.Row([
-                        dbc.Col(
+            # dbc.Col(
+            #     html.Div(
+            #         dbc.Row([
+            #             dbc.Col(
                             
-                                    [
-                                       dcc.Slider(
-                                            id='period-slider',
-                                            min=2,
-                                            max=10,
-                                            step=1,
-                                            value=10,
+            #                         [
+            #                            dcc.Slider(
+            #                                 id='period-slider',
+            #                                 min=2,
+            #                                 max=10,
+            #                                 step=1,
+            #                                 value=10,
                                             
-                                    ),
-                                    html.Div(id='slider-output', style={"padding-left":"3vh"}) 
-                                    ],
-                                    style={"height": "10vh"},
+            #                         ),
+            #                         html.Div(id='slider-output', style={"padding-left":"3vh"}) 
+            #                         ],
+            #                         style={"height": "10vh"},
                                 
                             
-                        ),
+            #             ),
                         
-                    ]
+            #         ]
 
-                    )
-                ),
-                width=2
-            ),
+            #         )
+            #     ),
+            #     width=2
+            # ),
             dbc.Col(
                 html.Div(
                     dbc.Row(
