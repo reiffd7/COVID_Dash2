@@ -3,6 +3,9 @@ import dash_core_components as dcc
 import dash_html_components as html  
 import dash_table
 from dash_table.Format import Format
+import sys
+sys.path.append('../')
+from utils import STATE_LABELS
 
 styles = {
     'pre': {
@@ -11,7 +14,61 @@ styles = {
     }
 }
 
+states_dropdown = dbc.Row(
+            [
+    
+                dbc.Col(dcc.Slider(
+                id='period-slider',
+                min=2,
+                max=10,
+                step=1,
+                marks={
+                    1: '1w',
+                    3: '3w',
+                    5: '5w',
+                    7: '7w',
+                    9: '9w'
+                },
+                value=3,                                 
+                ), width=3),
+                dbc.Col(html.Div(id='slider-output', style={"padding-left":"3vh"}
+                )),
+                dbc.Col(dcc.Dropdown(
+                    id="state_picker",
+                    options=STATE_LABELS,
+                    value="United States",
+                    clearable=False,
+                    searchable=False,
+                    style={"background-color": "coral", 'width': '5vw'}
+                ), width=3)
+            ],
+            no_gutters=True,
+            className="ml-auto flex-nowrap mt-3 mt-md-0",
+            style={'width': '50%'},
+            align="center"
+)
+
 desktop_body = [
+    dbc.Navbar(
+    [html.A(
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(id="flag", height="30px")),
+                    dbc.Col(dbc.NavbarBrand(id='page-title'))
+                ],
+                align='center',
+                no_gutters = True
+            ),
+            href="/"
+        ),
+
+       dbc.NavbarToggler(id="navbar-toggler"),
+       dbc.Collapse(states_dropdown, id="navbar-collapse", navbar=True)],
+    color="#010915",
+    dark=True,
+    className="desktop-navbar",
+    sticky="top" 
+    ),
     dbc.Row(
         [
             # dbc.Col(
