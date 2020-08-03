@@ -39,7 +39,7 @@ states_dropdown = dbc.Row(
                     value="United States",
                     clearable=False,
                     searchable=False,
-                    style={"background-color": "coral", 'width': '5vw'}
+                    style={"background-color": "#F6AA1C", 'width': '5vw'}
                 ), width=3)
             ],
             no_gutters=True,
