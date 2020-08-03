@@ -24,7 +24,7 @@ states_dropdown = dbc.Row(
                     7: '7w',
                     9: '9w'
                 },
-                value=2,                                 
+                value=7,                                 
                 ), width=3),
                 dbc.Col(html.Div(id='slider-output', style={"padding-left":"3vh"}
                 )),
