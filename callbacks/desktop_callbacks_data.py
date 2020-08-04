@@ -36,19 +36,24 @@ def register_desktop_callacks_data(app):
         [Output("pospct_title", "children")],
         [Input("state_picker", "value"),
         Input('period-slider', 'value'),
-        Input("choropleth", "hoverData")]
+        Input("choropleth", "hoverData"),
+        Input("map-criteria", "value")]
     )                                                   # pylint: disable=W0612
-    def positive_pct_title_callback(state, period, hoverData):
+    def positive_pct_title_callback(state, period, hoverData, criteria):
         print('shabba')
+        if criteria == 'cases':
+            title = 'Positive %'
+        else:
+            title = 'Death Rate'
         try:
             county = hoverData["points"][0]["customdata"][0]
-            return ["{}: Positive % Over Time".format(state)]
+            return ["{}: {} Over Time".format(state, title)]
         except:
             try:
                 state = hoverData["points"][0]["location"]
-                return ["{}: Positive % Over Time".format(state)]
+                return ["{}: {} Over Time".format(state, title)]
             except:
-                return ["{}: Positive % Over Time".format(state)]
+                return ["{}: {} Over Time".format(state, title)]
 
 
     ## positive-pct-chart
@@ -56,18 +61,19 @@ def register_desktop_callacks_data(app):
         [Output("pospct_chart", "figure")],
         [Input("state_picker", "value"),
         Input('period-slider', 'value'),
-        Input("choropleth", "hoverData")]
+        Input("choropleth", "hoverData"),
+        Input("map-criteria", "value")]
     )
-    def positive_pct_chart_callback(state, period, hoverData):
+    def positive_pct_chart_callback(state, period, hoverData, criteria):
         try:
             county = hoverData["points"][0]["customdata"][0]
             return dash.no_update
         except:
             try:
                 state = hoverData["points"][0]["location"]
-                return [positive_pct_chart(state, df)]
+                return [positive_pct_chart(state, df, criteria)]
             except:
-                return [positive_pct_chart(state, df)]
+                return [positive_pct_chart(state, df, criteria)]
 
 
     ## set the KPIs based on state_picker and period-slider
@@ -139,14 +145,15 @@ def register_desktop_callacks_data(app):
         Output('choropleth', 'figure'),
         [Input('state_picker', 'value'),
         Input('period-slider', 'value'),
-        Input('input-on-submit', 'n_clicks')])
-    def map_content(state, period, n_clicks):
+        Input('input-on-submit', 'n_clicks'),
+        Input('map-criteria', 'value')])
+    def map_content(state, period, n_clicks, criteria):
         lat, long = 0, 0
         if n_clicks == None:
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, long)
+                return choropleth_mapbox(state, period, df, lat, long, criteria)
             else:
-                return choropleth_mapbox_counties(state, period, county_df)
+                return choropleth_mapbox_counties(state, period, county_df, lat, long, criteria)
         if n_clicks%2 == 1:
             try:
                 IP = request.headers['X-Forwarded-For'] 
@@ -161,14 +168,14 @@ def register_desktop_callacks_data(app):
             except:
                 rop = "location not found"
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, long)
+                return choropleth_mapbox(state, period, df, lat, long, criteria)
             else:
-                return choropleth_mapbox_counties(state, period, county_df)
+                return choropleth_mapbox_counties(state, period, county_df, lat, long, criteria)
         else:
             if state == 'United States' or state == 'U.S.':
-                return choropleth_mapbox(state, period, df, lat, long)
+                return choropleth_mapbox(state, period, df, lat, long, criteria)
             else:
-                return choropleth_mapbox_counties(state, period, county_df)
+                return choropleth_mapbox_counties(state, period, county_df, lat, long, criteria)
             
             
 

@@ -14,6 +14,35 @@ styles = {
     }
 }
 
+################ TABS STYLING ####################
+
+font_size = ".9vw"
+color_active = "#F4F4F4"
+color_inactive = "#AEAEAE"
+color_bg = "#010914"
+
+tabs_styles = {
+    "flex-direction": "row",
+    "width": "5vw"
+}
+tab_style = {
+    "padding": "1.3vh",
+    "color": color_inactive,
+    "fontSize": font_size,
+    "backgroundColor": color_bg,
+    "width": "5vw"
+}
+
+tab_selected_style = {
+    "fontSize": font_size,
+    "color": color_active,
+    "padding": "1.3vh",
+    "backgroundColor": color_bg,
+    "width": "5vw"
+}
+
+
+## States Dropdown and Period Slider for the Navbar
 states_dropdown = dbc.Row(
             [
     
@@ -48,6 +77,56 @@ states_dropdown = dbc.Row(
             align="center"
 )
 
+
+## US Map
+us_maps_tabs = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                [
+                    html.Div(
+                        dcc.Tabs(
+                            id="map-criteria",
+                            value="cases",
+                            children=[
+                                dcc.Tab(
+                                    label="Cases",
+                                    value="cases",
+                                    style=tab_style,
+                                    selected_style=tab_selected_style,
+                                ),
+                                dcc.Tab(
+                                    label="Deaths",
+                                    value="deaths",
+                                    style=tab_style,
+                                    selected_style=tab_selected_style,
+                                ),
+                            ],
+                            style=tabs_styles,
+                            colors={
+                                "border": None,
+                                "primary": None,
+                                "background": None,
+                            },
+                        )
+                    ),
+                ],
+                className="d-flex justify-content-between top-bar-us-map-heading-content",
+            ),
+            html.Div(
+                dcc.Loading(
+                dcc.Graph(
+                    id="choropleth",
+                    style={"height": "40vh"},
+                    clear_on_unhover=True
+                ),),
+                id="map-container",
+            ),
+        ]
+    ),
+    style={'background-color': '#272B30'}
+)
+
 desktop_body = [
     dbc.Navbar(
     [html.A(
@@ -71,44 +150,14 @@ desktop_body = [
     ),
     dbc.Row(
         [
-            # dbc.Col(
-            #     html.Div(
-            #         dbc.Row([
-            #             dbc.Col(
-                            
-            #                         [
-            #                            dcc.Slider(
-            #                                 id='period-slider',
-            #                                 min=2,
-            #                                 max=10,
-            #                                 step=1,
-            #                                 value=10,
-                                            
-            #                         ),
-            #                         html.Div(id='slider-output', style={"padding-left":"3vh"}) 
-            #                         ],
-            #                         style={"height": "10vh"},
-                                
-                            
-            #             ),
-                        
-            #         ]
-
-            #         )
-            #     ),
-            #     width=2
-            # ),
             dbc.Col(
-                html.Div(
-                    dbc.Row(
-                    id = 'daily-stats'
-                    )
-                ),
-                width=7,
-                style={'padding-left':'10%'}
+                
+                id = 'daily-stats',
+                width=12
             )
             
-        ]
+        ],
+        className = "h-75"
     ),
     dbc.Row(
         [
@@ -187,23 +236,24 @@ desktop_body = [
     dbc.Row(
         [
             dbc.Col(
-                html.Div(
-                    dbc.CardBody(
-                        [
-                            html.Div(
-                                dcc.Loading(
-                                    dcc.Graph(
-                                    id="choropleth",
-                                    style={"height": "40vh"},
-                                    clear_on_unhover = True
-                                )
-                                )
-                            )
+                us_maps_tabs
+                # html.Div(
+                #     dbc.CardBody(
+                #         [
+                #             html.Div(
+                #                 dcc.Loading(
+                #                     dcc.Graph(
+                #                     id="choropleth",
+                #                     style={"height": "40vh"},
+                #                     clear_on_unhover = True
+                #                 )
+                #                 )
+                #             )
                             
-                        ]
-                    ),
-                    id='map-container'
-                )
+                #         ]
+                #     ),
+                #     id='map-container'
+                # )
             )
         ]
     ),

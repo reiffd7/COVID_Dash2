@@ -51,7 +51,9 @@ class CountiesDataFrame(object):
     def AddCalculatedFields(self):
         self.df['new positive cases'] = self.df.groupby(['fips'])['cases'].diff(1).fillna(0)
         self.df['new positive cases (last 7 days)'] = self.df.groupby(['fips'])['new positive cases'].apply(lambda x: x.rolling(7, min_periods=0).sum())
-
+        self.df['new deaths'] = self.df.groupby(['fips'])['deaths'].diff(1).fillna(0)
+        self.df['new deaths (last 7 days)'] = self.df.groupby(['fips'])['new deaths'].apply(lambda x: x.rolling(7, min_periods=0).sum())
+        self.df['death rate (last 7 days)'] = self.df['new deaths (last 7 days)']/self.df['new positive cases (last 7 days)']
 
 
 class StatesDataFrame(object):
@@ -85,9 +87,10 @@ class StatesDataFrame(object):
         ## Basic Info - Positives/Negatives/Deaths/Tests - In the last week
         self.df['new positive cases'] = self.df.groupby(['state', 'fips'])['positive'].diff(1).fillna(0)
         self.df['new negative cases'] = self.df.groupby(['state', 'fips'])['negative'].diff(1).fillna(0)
+        self.df['new deaths'] = self.df['deathIncrease']
         self.df['new negative cases (last 7 days)'] = self.df.groupby(['state', 'fips'])['new negative cases'].apply(lambda x: x.rolling(7, min_periods=0).sum())
         self.df['new positive cases (last 7 days)'] = self.df.groupby(['state', 'fips'])['new positive cases'].apply(lambda x: x.rolling(7, min_periods=0).sum())
-        self.df['new deaths (last 7 days)'] = self.df.groupby(['state', 'fips'])['deathIncrease'].apply(lambda x: x.rolling(7, min_periods=0).sum())
+        self.df['new deaths (last 7 days)'] = self.df.groupby(['state', 'fips'])['new deaths'].apply(lambda x: x.rolling(7, min_periods=0).sum())
         self.df['tests (last 7 days)'] = self.df['new positive cases (last 7 days)'] + self.df['new negative cases (last 7 days)']
 
         ## Percentages - Death/Positive Rate

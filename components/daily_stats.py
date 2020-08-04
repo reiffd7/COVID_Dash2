@@ -16,20 +16,24 @@ def get_daily_stats(state, period, df):
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
 
     if state=='United States':
-        data = df.groupby('date').agg({'positive':'sum', 'new positive cases (last 7 days)':'sum', 'new negative cases (last 7 days)': 'sum', 'new positive cases':'sum', 'new negative cases': 'sum', 'positive case pct': 'mean'})
+        data = df.groupby('date').agg({'positive':'sum', 'new positive cases (last 7 days)':'sum', 'new deaths (last 7 days)':'sum', 'new negative cases (last 7 days)': 'sum', 'new positive cases':'sum', 'new negative cases': 'sum', 'positive case pct': 'mean', 'death rate (last 7 days)': 'mean'})
         # data = df.groupby('date').mean()[['positive cases rate of change (last 7 days average)', 'positive case pct rate of change (last 7 days average)', 'testing rate of change (last 7 days average)']]
         data = data.sort_values(by='date')
         
     else:
-        data = df[df['state'] == state][['date', 'new negative cases', 'new positive cases (last 7 days)', 'new negative cases (last 7 days)', 'new positive cases', 'positive case pct']]
+        data = df[df['state'] == state][['date', 'new negative cases', 'new positive cases (last 7 days)', 'new deaths (last 7 days)', 'new negative cases (last 7 days)', 'new positive cases', 'positive case pct', 'death rate (last 7 days)']]
         data = data.sort_values(by='date')
         
 
     data['period positives'] = data['new positive cases (last 7 days)'].shift(period*7)
+    data['period deaths'] = data['new deaths (last 7 days)'].shift(period*7)
     data['period positive pct'] = data['positive case pct'].shift(period*7)
-    
+    data['period death rate'] = data['death rate (last 7 days)'].shift(period*7)
+
     data['% Difference positives'] = ((data['new positive cases (last 7 days)'] - data['period positives'])/data['period positives'])*100
+    data['% Difference deaths'] = ((data['new deaths (last 7 days)'] - data['period deaths'])/data['period deaths'])*100
     data['Difference positive pct'] = (data['positive case pct'] - data['period positive pct'])
+    data['Difference death rate'] = (data['death rate (last 7 days)'] - data['period death rate'])
     data = data.sort_values(by='date')
     data = data.tail(1)
 
@@ -40,6 +44,13 @@ def get_daily_stats(state, period, df):
     elif perc_change < 0.0:
         positives_color = GREEN
 
+    new_deaths = int(data['new deaths (last 7 days)'].to_numpy()[0])
+    perc_change_deaths = data['% Difference deaths'].to_numpy()[0]
+    if perc_change_deaths > 0.0:
+        deaths_color = RED
+    elif perc_change_deaths < 0.0:
+        deaths_color = GREEN
+
     positive_rate = data['positive case pct'].to_numpy()[0]
     positive_rate_change = data['Difference positive pct'].to_numpy()[0]
     if positive_rate_change > 0.0:
@@ -47,10 +58,18 @@ def get_daily_stats(state, period, df):
     elif positive_rate_change < 0.0:
         positive_rate_color = GREEN
 
+    death_rate = data['death rate (last 7 days)'].to_numpy()[0]
+    death_rate_change = data['Difference death rate'].to_numpy()[0]
+    if death_rate_change > 0.0:
+        death_rate_color = RED
+    elif death_rate_change < 0.0:
+        death_rate_color = GREEN
+
     stats = {
         'Positive Cases*': [new_positives, perc_change, positives_color],
         'Positive Rate*': [positive_rate, positive_rate_change, positive_rate_color],
-        'INFO' : [df['date'].max()]
+        'Deaths*': [new_deaths, perc_change_deaths, deaths_color],
+        'Death Rate*': [death_rate, death_rate_change, death_rate_color]
     }
     return stats
 
@@ -98,8 +117,7 @@ def get_daily_counties(county, state, period, df, county_df):
 
     stats = {
         'Positive Cases*': [new_positives, perc_change, positives_color],
-        'Positive Rate*': [positive_rate, positive_rate_change, positive_rate_color],
-        'INFO' : [df['date'].max()]
+        'Positive Rate*': [positive_rate, positive_rate_change, positive_rate_color]
     }
     print(stats)
     return stats
@@ -116,77 +134,45 @@ def daily_stats(county, state, period, df, county_df):
     # print(stats)
     cards = []
     for key, value in stats.items():
-        if key == 'Positive Cases*':
-            card = dbc.Col(
-                    dbc.Col(
-                        dbc.CardBody(
-                            [
-                                html.P(
-                                    "{}%".format(round(value[1], 0)),
-                                    style = {"color": value[2]}
-                                ),
-                                html.H1(
-                                    f"{value[0]:,d}"
-                                ),
-                                html.P(
-                                    f"{key} - {locator}"
-                                )
-                            ]
-                        ),
-            
-                    ),
-                    width=4
+        if key == 'Positive Cases*' or key == 'Deaths*':
+            card_content = [
+                dbc.CardHeader("{}% change".format(round(value[1], 0)),
+                                    style = {"color": value[2]}),
+                dbc.CardBody(
+                    [
+                        html.H3(f"{value[0]:,d}", className="Card header"),
+                        html.P(
+                            f"{key} - {locator}",
+                            className="card-text"
+                        )
+                    ]
                 )
+            ]
+            card = dbc.Col(dbc.Card(card_content, color="dark", inverse=True))
             cards.append(card)
-        elif key == 'INFO':
-            card = dbc.Col(
-                    dbc.Col(
-                        dbc.Row(
-                            [
-                                
-                                html.H1(
-                                    "Hover over states to view case growth and positive % graphs.",
-                                    style = {"font-size": "15px"}
-                                ),
-                                html.H1(
-                                    "Hover over counties to view case growth compared to their state.",
-                                    style = {"font-size": "15px"}
-                                ),
-                                html.P(
-                                    "Updated: {}".format(value[0]),
-                                    style = {"font-weight": "bold", "color":"#BB9F06"}
-                                ),
-                                html.P(
-                                    "* In Last 7 Days"
-                                )
-                            ],
-                            
-                        ),
-            
-                    ),
-                    width=4
-            )
-            cards.append(card)
+    
         else:
-            card = dbc.Col(
-                    dbc.Col(
-                        dbc.CardBody(
-                            [
-                                html.P(
-                                    "{}%".format(round(value[1]*100, 1)),
-                                    style = {"color": value[2]}
-                                ),
-                                html.H1(
-                                    f"{round(value[0]*100, 1)}%"
-                                ),
-                                html.P(
-                                    f"{key} - {state}"
-                                )
-                            ]
-                        ),
-            
-                    ),
-                    width=4
+            card_content = [
+                dbc.CardHeader("{}% change".format(round(value[1]*100, 1)),
+                                    style = {"color": value[2]}),
+                dbc.CardBody(
+                    [
+                        html.H3(f"{round(value[0]*100, 1)}%", className="Card header"),
+                        html.P(
+                            f"{key} - {state}",
+                            className="card-text"
+                        )
+                    ]
                 )
+            ]
+            card = dbc.Col(dbc.Card(card_content, color="dark", inverse=True))
             cards.append(card)
+    cards = html.Div(
+        [
+            dbc.Row(
+                cards,
+                className = "mb-4"
+            )
+        ]
+    )
     return cards

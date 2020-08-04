@@ -26,36 +26,55 @@ def human_format(num):
 
 
 
-def positive_pct_chart(state, df):
-
-    df = df[(df['positive case pct'] < 1.0) & (df['positive case pct'] >= 0.0)]
-    df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
-    df = df[df['date'] >= '2020-04-20']
-    if state == 'United States':
-        # df = df[df['date'] != '2020-06-11']
-        print('fire')
-        data = df.groupby('date').agg({'positive case pct': 'mean'})
-        
-        data = data.reset_index().sort_values(by='date')
+def positive_pct_chart(state, df, criteria):
+    if criteria == 'cases':
+        df = df[(df['positive case pct'] < 1.0) & (df['positive case pct'] >= 0.0)]
+        df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
+        df = df[df['date'] >= '2020-04-20']
+        if state == 'United States':
+            # df = df[df['date'] != '2020-06-11']
+            print('fire')
+            data = df.groupby('date').agg({'positive case pct': 'mean'})
+            data = data.reset_index().sort_values(by='date')
+            data = data.rename(columns={'positive case pct': 'criteria'})
+        else:
+            data = df[df['state'] == state]
+            data = data[['date', 'positive case pct']]
+            data = data.rename(columns={'positive case pct': 'criteria'})
+        template_new = "%{customdata} positive pct on %{text}<extra></extra>"
+        yax_tit = "positive % (last 7 days)"
     else:
-        data = df[df['state'] == state]
-        data = data[['date', 'positive case pct']]
+        df = df[(df['death rate (last 7 days)'] < 1.0) & (df['death rate (last 7 days)'] >= 0.0)]
+        df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
+        df = df[df['date'] >= '2020-04-20']
+        if state == 'United States':
+            # df = df[df['date'] != '2020-06-11']
+            print('fire')
+            data = df.groupby('date').agg({'death rate (last 7 days)': 'mean'})
+            data = data.reset_index().sort_values(by='date')
+            data = data.rename(columns={'death rate (last 7 days)': 'criteria'})
+        else:
+            data = df[df['state'] == state]
+            data = data[['date', 'death rate (last 7 days)']]
+            data = data.rename(columns={'death rate (last 7 days)': 'criteria'})
+        template_new = "%{customdata} death rate on %{text}<extra></extra>"
+        yax_tit = "date rate (last 7 days)"
 
     # data['positives in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
     # data['negatives in period'] = data['new negative cases'].rolling(period*7, min_periods=0).sum()
     # data['positive pct in period'] = data['positives in period']/(data['positives in period'] + data['negatives in period'])
-    ys = data['positive case pct']
+    ys = data['criteria']
     xs = data['date']
     # length = math.ceil(max(max(ys), max(xs)))
     # annotation_x = length+1
     # annotation_y = length+1
-    template_new = "%{customdata} positive pct on %{text}<extra></extra>"
+  
     monthDict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August'}
     data['month'] = pd.to_datetime(data['date']).apply(lambda x: monthDict[x.month])
     fig = go.Figure()
     for month in monthDict.values():
         monthly_data = data[data['month'] == month]
-        ys = monthly_data['positive case pct']
+        ys = monthly_data['criteria']
         xs = monthly_data['date']
         fig.add_trace(
             go.Scatter(
@@ -64,7 +83,7 @@ def positive_pct_chart(state, df):
                 text = monthly_data['date'],
                 mode = 'markers+lines',
                 name=month,
-                customdata = [human_format(x) for x in monthly_data['positive case pct'].to_numpy()],
+                customdata = [human_format(x) for x in monthly_data['criteria'].to_numpy()],
                 hovertemplate=template_new,
                 showlegend = True
 
@@ -118,8 +137,8 @@ def positive_pct_chart(state, df):
         xaxis_showgrid=False,
         yaxis_showgrid=False,
         font=dict(family="Roboto, sans-serif", size=10, color="#f4f4f4"),
-        yaxis_title="positive % (last 7 days)",
-        xaxis = {"title" : {"text" : "Date", "standoff" : 0}}
+        yaxis_title=yax_tit,
+        xaxis = {"title" : {"standoff" : 0}}
     )
     return fig
 

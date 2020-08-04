@@ -16,15 +16,22 @@ statesJSON = requests.get('https://raw.githubusercontent.com/python-visualizatio
 
 
 
-def choropleth_mapbox(state, period, df, lati, long):
+def choropleth_mapbox(state, period, df, lati, long, criteria):
     print(lati, long)
     # lati, long = 45.5017, -73.5673
     # df = pd.read_csv('todays_data.csv')
-    mapDf = df[['state', 'date', 'new positive cases (last 7 days)']]
-    mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
-    mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
-    mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
-    mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
+    if criteria == 'cases':
+        mapDf = df[['state', 'date', 'new positive cases (last 7 days)']].fillna(0)
+        mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
+        mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
+        mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
+        mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
+    else:
+        mapDf = df[['state', 'date', 'new deaths (last 7 days)']].fillna(0)
+        mapDf['period'] = mapDf.groupby('state')['new deaths (last 7 days)'].shift(period*7)
+        mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
+        mapLatest['% Difference'] = ((mapLatest['new deaths (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
+        # mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
     
     if state == 'United States':
         fig = px.choropleth_mapbox(mapLatest,
@@ -70,19 +77,32 @@ def choropleth_mapbox(state, period, df, lati, long):
 
 
 
-def choropleth_mapbox_counties(state, period, df):
+def choropleth_mapbox_counties(state, period, df, lati, long, criteria):
     with urlopen('https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json') as response:
         counties = json.load(response)
     # df = pd.read_csv('utils/todays_county_data.csv')
-    mapDf = df[['state', 'county', 'date', 'fips', 'new positive cases (last 7 days)']]
-    print(mapDf)
-    mapDf = mapDf[mapDf['state'] == state]
-    print(mapDf)
-    mapDf['period'] = mapDf.groupby('fips')['new positive cases (last 7 days)'].shift(period*7)
-    mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
-    mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
-    mapLatest['fips'] = mapLatest['fips'].apply(lambda x: str(x).zfill(5))
-    print(mapLatest)
+    if criteria == 'cases':
+        mapDf = df[['state', 'county', 'date', 'fips', 'new positive cases (last 7 days)']]
+        print(mapDf)
+        mapDf = mapDf[mapDf['state'] == state]
+        print(mapDf)
+        mapDf['period'] = mapDf.groupby('fips')['new positive cases (last 7 days)'].shift(period*7)
+        mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
+        mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
+        mapLatest['fips'] = mapLatest['fips'].apply(lambda x: str(x).zfill(5))
+        print(mapLatest)
+    else:
+        mapDf = df[['state', 'county', 'date', 'fips', 'new deaths (last 7 days)']]
+        print(mapDf)
+        mapDf = mapDf[mapDf['state'] == state]
+        print(mapDf)
+        mapDf['period'] = mapDf.groupby('fips')['new deaths (last 7 days)'].shift(period*7)
+        mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
+        mapLatest['% Difference'] = ((mapLatest['new deaths (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
+        mapLatest['fips'] = mapLatest['fips'].apply(lambda x: str(x).zfill(5))
+        print(mapLatest)
+
+
     fig = px.choropleth_mapbox(mapLatest,
         geojson=counties,
         locations='fips',
@@ -94,6 +114,19 @@ def choropleth_mapbox_counties(state, period, df):
         zoom=5, center = {"lat": COORDS[state]['lat'], "lon": COORDS[state]['long']},
         template="plotly_dark",
         mapbox_style = 'carto-darkmatter' )
+    if lati != 0:
+        fig.add_trace(go.Scattermapbox(
+            lat=[lati],
+            lon=[long],
+            mode='markers+text',
+            text=['My Current Location'],
+            textposition = "bottom right",
+            hoverinfo = 'none',
+            marker=go.scattermapbox.Marker(
+            size=12,
+            color='rgb(238, 198, 67)',
+            opacity=0.7
+        )))
     fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, mapbox= dict(accesstoken = 'pk.eyJ1IjoicmVpZmZkIiwiYSI6ImNrOHFjaXlmOTAyaW0zamp6ZzI4NmtmMTQifQ.4EOhJ5NJJpawQnnoBXGCkw'))
     fig.update_layout(clickmode='event+select')
     return fig
