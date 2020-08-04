@@ -22,13 +22,13 @@ def register_desktop_callacks_data(app):
     dfOBJ = StatesDataFrame()
     df = dfOBJ.df
     # df = df[df['date'] >= '2020-04-20']
-    states = dfOBJ.states
-    df.to_csv('utils/todays_data.csv', index=False)
+    # states = dfOBJ.states
+    # df.to_csv('utils/todays_data.csv', index=False)
     
     county_dfOBJ = CountiesDataFrame()
     county_df = county_dfOBJ.df
     # county_df = county_df[county_df['date'] >= '2020-04-20']
-    county_df.to_csv('utils/todays_county_data.csv', index=False)
+    # county_df.to_csv('utils/todays_county_data.csv', index=False)
 
 
     ## positive-pct-chart title
