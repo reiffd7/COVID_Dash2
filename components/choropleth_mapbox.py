@@ -33,6 +33,7 @@ def choropleth_mapbox(state, period, df, lati, long, criteria):
         mapLatest['% Difference'] = ((mapLatest['new deaths (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
         # mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
     
+    # template_new = "{locations}: %{customdata} change over the last {} weeks".format(period)
     if state == 'United States':
         fig = px.choropleth_mapbox(mapLatest,
             geojson = statesJSON,
@@ -43,7 +44,7 @@ def choropleth_mapbox(state, period, df, lati, long, criteria):
             range_color = [-100, 100],
             zoom=3, center = {"lat": 37.0902, "lon": -95.7129},
             template="plotly_dark",
-            mapbox_style = 'carto-darkmatter'
+            mapbox_style = 'satellite'
             )
         fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, mapbox = dict(accesstoken='pk.eyJ1IjoicmVpZmZkIiwiYSI6ImNrOHFjaXlmOTAyaW0zamp6ZzI4NmtmMTQifQ.4EOhJ5NJJpawQnnoBXGCkw'))
     else:
@@ -56,7 +57,7 @@ def choropleth_mapbox(state, period, df, lati, long, criteria):
             range_color = [-100, 100],
             zoom=5, center = {"lat": COORDS[state]['lat'], "lon": COORDS[state]['long']},
             template="plotly_dark",
-            mapbox_style = 'carto-darkmatter'
+            mapbox_style = 'satellite'
             )
         fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0}, mapbox= dict(accesstoken = 'pk.eyJ1IjoicmVpZmZkIiwiYSI6ImNrOHFjaXlmOTAyaW0zamp6ZzI4NmtmMTQifQ.4EOhJ5NJJpawQnnoBXGCkw'))
 
@@ -113,7 +114,7 @@ def choropleth_mapbox_counties(state, period, df, lati, long, criteria):
         hover_data = ['county', '% Difference'],
         zoom=5, center = {"lat": COORDS[state]['lat'], "lon": COORDS[state]['long']},
         template="plotly_dark",
-        mapbox_style = 'carto-darkmatter' )
+        mapbox_style = 'satellite' )
     if lati != 0:
         fig.add_trace(go.Scattermapbox(
             lat=[lati],
