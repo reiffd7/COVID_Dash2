@@ -186,11 +186,10 @@ def register_desktop_callacks_data(app):
     @app.callback(
         Output('sim-states', 'children'),
         [Input('state_picker', 'value'),
-        Input('period-slider', 'value'),
         Input('sim-state-criteria', 'value')]
     )
-    def sim_states_callback(state, period, criterias):
+    def sim_states_callback(state, criterias):
         if state == 'United States' or state == 'U.S.':
             return html.Div('Select a state to view the 5 most similar states based on metrics selected directly above')
         else:
-            return create_cards(state, period, df, criterias)
+            return create_cards(state, df, criterias)

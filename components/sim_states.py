@@ -41,7 +41,7 @@ CRITERIA_DICT = {'Per Capita': ['new deaths (per capita)',
                         'new positive (per capita)',
                         'positive cases rate of change (last 7 days average)']}
 
-def get_top_five_sim(state, period, df, criterias):
+def get_top_five_sim(state, df, criterias):
     # df = pd.read_csv('utils/todays_data.csv')
     df['date'] = pd.DatetimeIndex(df['date']).strftime("%Y-%m-%d")
     # df = df[['state', 'date', 'new positive cases (last 7 days)', 'positive case pct']]
@@ -72,8 +72,8 @@ def get_top_five_sim(state, period, df, criterias):
     sim_df = pd.DataFrame(sim_list).sort_values(by='similarity', ascending=False)
     return sim_df['state'].to_numpy()[:5]
 
-def create_cards(state, period, df, criterias):
-    top_5_states = get_top_five_sim(state, period, df, criterias)
+def create_cards(state, df, criterias):
+    top_5_states = get_top_five_sim(state, df, criterias)
     cards = []
     for i, state in enumerate(top_5_states):
         img_url = 'https://dynamic-covid19-analysis.s3.us-east-2.amazonaws.com/{}.png'.format(state)
