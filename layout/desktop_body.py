@@ -258,9 +258,6 @@ desktop_body = [
         ]
     ),
     dbc.Row(
-        id='sim-states'
-    ),
-    dbc.Row(
         dbc.Col(
             [html.Button('Find My Location', id='input-on-submit'),
             html.Pre(
@@ -268,5 +265,24 @@ desktop_body = [
                 style = styles['pre']
             )]
         )
+    ),
+    dbc.Row(
+        dbc.Col(
+                [dcc.Dropdown(
+                id= "sim-state-criteria",
+                options=[{'label': 'Per Capita', 'value': 'Per Capita'},
+                        {'label': 'Dynamics', 'value': 'Dynamics'},
+                        {'label': 'Testing', 'value': 'Testing'},
+                        {'label': 'Deaths', 'value': 'Deaths'},
+                        {'label': 'Cases', 'value': 'Cases'}],
+                value=['Cases', 'Testing'],
+                multi=True
+            ),
+            dbc.Row(
+                id='sim-states'
+            )]
     )
+    )
+    
+    
 ]

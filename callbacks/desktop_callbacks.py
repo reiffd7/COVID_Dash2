@@ -6,6 +6,7 @@ import plotly.express as px
 import dash_html_components as html 
 import json
 import requests
+import dash_core_components as dcc
 from flask import request
 import urllib3.request
 import geocoder
@@ -80,10 +81,13 @@ def register_desktop_callbacks(app):
                 rop = requests.get(url).json()
             except:
                 rop = "location not found"
+            
+            try:
+                location = "You are located in {}, {}".format(rop['city'], rop['region'])
+            except:
+                location = "Location Not Found"
 
-
-            return html.Div([IP, str(rop)])
+            return html.Div(location)
         else:
             return None
 
-   

@@ -25,12 +25,14 @@ def choropleth_mapbox(state, period, df, lati, long, criteria):
         mapDf['period'] = mapDf.groupby('state')['new positive cases (last 7 days)'].shift(period*7)
         mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
         mapLatest['% Difference'] = ((mapLatest['new positive cases (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
-        mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
+        # mapLatest = mapLatest.fillna(0)
+        # mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
     else:
         mapDf = df[['state', 'date', 'new deaths (last 7 days)']].fillna(0)
         mapDf['period'] = mapDf.groupby('state')['new deaths (last 7 days)'].shift(period*7)
         mapLatest = mapDf[mapDf['date'] == mapDf['date'].max()]
         mapLatest['% Difference'] = ((mapLatest['new deaths (last 7 days)'] - mapLatest['period'])/mapLatest['period'])*100
+        # mapLatest = mapLatest.fillna(0)
         # mapLatest['% Difference'] = mapLatest['% Difference'].apply(lambda x: int(x))
     
     # template_new = "{locations}: %{customdata} change over the last {} weeks".format(period)
