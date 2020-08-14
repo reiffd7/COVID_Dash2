@@ -21,7 +21,7 @@ app.config.suppress_callback_exceptions = True
 
 app.layout = build_desktop_layout
 
-
+app.title = 'COVID Dash'
 ################################################################################
 #
 #    Register callbacks

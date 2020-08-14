@@ -261,8 +261,7 @@ desktop_body = [
         dbc.Col(
             [html.Button('Find My Location', id='input-on-submit'),
             html.Pre(
-                id='ip-data',
-                style = styles['pre']
+                id='ip-data'
             )]
         )
     ),
@@ -276,9 +275,10 @@ desktop_body = [
                         {'label': 'Deaths', 'value': 'Deaths'},
                         {'label': 'Cases', 'value': 'Cases'}],
                 value=['Cases', 'Testing'],
-                multi=True
+                multi=True,
+                style={"background": "#272B30", "color": "#272B30"}
             ),
-            dbc.Row(
+            html.Div(
                 id='sim-states'
             )]
     )

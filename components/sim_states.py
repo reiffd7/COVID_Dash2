@@ -27,19 +27,11 @@ CRITERIA_DICT = {'Per Capita': ['new deaths (per capita)',
                             'death pct rate of change',
                             'positive case pct rate of change (last 7 days average)',
                             'positive cases rate of change (last 7 days average)'],
-                'Testing': ['tests (last 7 days)', 
-                            'tests (last 7 days per capita)',
-                            'testing rate of change (last 7 days average)'],
+                'Testing': ['tests (last 7 days)'],
                 'Deaths': ['new deaths (last 7 days)', 
-                            'new deaths',
-                            'death rate (last 7 days)',
-                            'death pct rate of change',
-                            'new deaths (per capita)'],
+                            'new deaths'],
                 'Cases': ['new positive cases',
-                        'new positive cases (last 7 days)',
-                        'positive case pct',
-                        'new positive (per capita)',
-                        'positive cases rate of change (last 7 days average)']}
+                        'new positive cases (last 7 days)']}
 
 def get_top_five_sim(state, df, criterias):
     # df = pd.read_csv('utils/todays_data.csv')
@@ -97,7 +89,7 @@ def create_cards(state, df, criterias):
             )
         cards.append(entry)
 
-    return cards
+    return dbc.Row(cards)
         
 
 
