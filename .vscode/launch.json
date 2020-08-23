@@ -3,6 +3,21 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
+            "name": "Documents:components.choropleth_mapbox_animate.choropleth_mapbox (python3.7)",
+            "invokeTarget": {
+                "target": "code",
+                "projectRoot": "",
+                "lambdaHandler": "components.choropleth_mapbox_animate.choropleth_mapbox"
+            },
+            "lambda": {
+                "runtime": "python3.7",
+                "payload": {},
+                "environmentVariables": {}
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
             "name": "Documents:components.sim_states.create_cards (python3.7)",
             "invokeTarget": {
                 "target": "code",

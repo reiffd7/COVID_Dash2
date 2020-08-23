@@ -127,6 +127,15 @@ us_maps_tabs = dbc.Card(
     style={'background-color': '#272B30'}
 )
 
+
+## US Map
+us_maps_animate = dbc.Card(
+    id="choropleth_animate",
+    style={'background-color': '#272B30'}
+)
+
+
+
 desktop_body = [
     dbc.Navbar(
     [html.A(
@@ -237,6 +246,30 @@ desktop_body = [
         [
             dbc.Col(
                 us_maps_tabs
+                # html.Div(
+                #     dbc.CardBody(
+                #         [
+                #             html.Div(
+                #                 dcc.Loading(
+                #                     dcc.Graph(
+                #                     id="choropleth",
+                #                     style={"height": "40vh"},
+                #                     clear_on_unhover = True
+                #                 )
+                #                 )
+                #             )
+                            
+                #         ]
+                #     ),
+                #     id='map-container'
+                # )
+            )
+        ]
+    ),
+    dbc.Row(
+        [
+            dbc.Col(
+                us_maps_animate
                 # html.Div(
                 #     dbc.CardBody(
                 #         [

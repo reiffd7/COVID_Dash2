@@ -55,6 +55,8 @@ class CountiesDataFrame(object):
         self.df['new deaths (last 7 days)'] = self.df.groupby(['fips'])['new deaths'].apply(lambda x: x.rolling(7, min_periods=0).sum())
         self.df['death rate (last 7 days)'] = self.df['new deaths (last 7 days)']/self.df['new positive cases (last 7 days)']
 
+        self.df['date'] = pd.to_datetime(self.df['date'].apply(lambda x: str(x).split(' ')[0]))
+
 
 class StatesDataFrame(object):
 

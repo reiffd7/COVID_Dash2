@@ -10,7 +10,7 @@ from flask import request
 import sys
 sys.path.append('../')
 from utils import StatesDataFrame, CountiesDataFrame, COORDS, cosine_sim, StateFlags
-from components import existing_vs_new_chart, existing_vs_new_chart_counties, positive_pct_chart, choropleth_mapbox, choropleth_mapbox_counties, create_cards, daily_stats
+from components import existing_vs_new_chart, existing_vs_new_chart_counties, positive_pct_chart, choropleth_mapbox, choropleth_mapbox_counties, create_cards, daily_stats, choropleth_mapbox_animate, choropleth_mapbox_counties_animate
 
 with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
@@ -178,6 +178,20 @@ def register_desktop_callacks_data(app):
             else:
                 return choropleth_mapbox_counties(state, period, county_df, lat, long, criteria)
             
+
+    @app.callback(
+        Output('choropleth_animate', 'children'),
+        [Input('state_picker', 'value'),
+        Input('period-slider', 'value'),
+        Input('map-criteria', 'value')])
+    def map_content(state, period, criteria):
+        if state == 'United States' or state == 'U.S.':
+            return choropleth_mapbox_animate(state, period, df, criteria)
+        else:
+            return None
+        
+
+  
             
 
 
