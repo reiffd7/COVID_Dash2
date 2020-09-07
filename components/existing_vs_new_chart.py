@@ -39,7 +39,7 @@ def existing_vs_new_chart(state, period, df):
         data = data[['date',  'new positive cases', 'new positive cases (last 7 days)']]
 
     data['new positive in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
-    monthDict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August'}
+    monthDict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
     data['month'] = pd.to_datetime(data['date']).apply(lambda x: monthDict[x.month])
     ys = np.log(data['new positive cases (last 7 days)'])
     xs = np.log(data['new positive in period'])
@@ -129,7 +129,7 @@ def existing_vs_new_chart_counties(state, county, period, county_df, data):
 
     data['new positive in period'] = data['new positive cases'].rolling(period*7, min_periods=0).sum()
     county_data['new positive in period'] = county_data['new positive cases'].rolling(period*7, min_periods=0).sum()
-    monthDict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August'}
+    monthDict = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December'}
     data['month'] = pd.to_datetime(data['date']).apply(lambda x: monthDict[x.month])
     ys = np.log(data['new positive cases (last 7 days)'])
     xs = np.log(data['new positive in period'])

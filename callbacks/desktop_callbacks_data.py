@@ -63,9 +63,10 @@ def register_desktop_callacks_data(app):
         [Input("state_picker", "value"),
         Input('period-slider', 'value'),
         Input("choropleth", "hoverData"),
-        Input("map-criteria", "value")]
+        Input("map-criteria", "value"),
+        Input('input-on-submit', 'n_clicks')]
     )
-    def positive_pct_chart_callback(state, period, hoverData, criteria):
+    def positive_pct_chart_callback(state, period, hoverData, criteria, n_clicks):
         try:
             county = hoverData["points"][0]["customdata"][0]
             return dash.no_update
@@ -101,13 +102,16 @@ def register_desktop_callacks_data(app):
             
 
     ## existing-vs-new-chart title
+   
     @app.callback(
     [Output("existing-vs-new-chart-title", "children")],
     [Input("state_picker", "value"),
     Input("period-slider", "value"),
-    Input("choropleth", "hoverData")],
+    Input("choropleth", "hoverData"),
+    Input('input-on-submit', 'n_clicks'),
+    Input('map-criteria', 'value')]
     )                                                   # pylint: disable=W0612
-    def confirmed_cases_chart_title_callback(state, period, hoverData):
+    def confirmed_cases_chart_title_callback(state, period, hoverData, n_clicks, map_crit):
         try:
             county = hoverData["points"][0]["customdata"][0]
             return ["{} vs {}: Last {} Weeks Cases vs. New Cases".format(state, county, period)]
