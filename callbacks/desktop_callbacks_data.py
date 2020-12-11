@@ -33,6 +33,7 @@ def register_desktop_callacks_data(app, cache):
         if criteria == 'County':
             county_dfOBJ = CountiesDataFrame()
             county_df = county_dfOBJ.df
+            return county_df
             # county_df = county_df[county_df['date'] >= '2020-04-20']
             # county_df.to_csv('utils/todays_county_data.csv', index=False)
 
