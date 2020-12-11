@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import dash_html_components as html
 from layout import build_desktop_layout
 from callbacks import register_routes_callbacks, register_desktop_callbacks, register_desktop_callacks_data
+from flask_caching import Cache
 
 
 external_stylesheets = [
@@ -15,6 +16,12 @@ external_stylesheets = [
 
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+cache = Cache(app.server, config={
+    'CACHE_TYPE': 'filesystem',
+    'CACHE_DIR': 'cache-directory'
+})
+
+TIMEOUT = 60
 server = app.server
 app.config.suppress_callback_exceptions = True
 
@@ -30,7 +37,7 @@ app.title = 'COVID Dash'
 
 register_routes_callbacks(app)   
 register_desktop_callbacks(app)
-register_desktop_callacks_data(app)
+register_desktop_callacks_data(app, cache)
 
 
 if __name__ == '__main__':

@@ -266,30 +266,30 @@ desktop_body = [
             )
         ]
     ),
-    dbc.Row(
-        [
-            dbc.Col(
-                us_maps_animate
-                # html.Div(
-                #     dbc.CardBody(
-                #         [
-                #             html.Div(
-                #                 dcc.Loading(
-                #                     dcc.Graph(
-                #                     id="choropleth",
-                #                     style={"height": "40vh"},
-                #                     clear_on_unhover = True
-                #                 )
-                #                 )
-                #             )
+    # dbc.Row(
+    #     [
+    #         dbc.Col(
+    #             us_maps_animate
+    #             # html.Div(
+    #             #     dbc.CardBody(
+    #             #         [
+    #             #             html.Div(
+    #             #                 dcc.Loading(
+    #             #                     dcc.Graph(
+    #             #                     id="choropleth",
+    #             #                     style={"height": "40vh"},
+    #             #                     clear_on_unhover = True
+    #             #                 )
+    #             #                 )
+    #             #             )
                             
-                #         ]
-                #     ),
-                #     id='map-container'
-                # )
-            )
-        ]
-    ),
+    #             #         ]
+    #             #     ),
+    #             #     id='map-container'
+    #             # )
+    #         )
+    #     ]
+    # ),
     dbc.Row(
         dbc.Col(
             [html.Button('Find My Location', id='input-on-submit'),

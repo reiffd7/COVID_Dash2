@@ -12,25 +12,32 @@ sys.path.append('../')
 from utils import StatesDataFrame, CountiesDataFrame, COORDS, cosine_sim, StateFlags
 from components import existing_vs_new_chart, existing_vs_new_chart_counties, positive_pct_chart, choropleth_mapbox, choropleth_mapbox_counties, create_cards, daily_stats, choropleth_mapbox_animate, choropleth_mapbox_counties_animate
 
+
+
 with open('web_scraping/states.json', 'r') as f:
     stateAbbrevs = json.load(f)
 stateAbbrevs = {v: k for k,v in stateAbbrevs.items()}
 
 
-def register_desktop_callacks_data(app):
+def register_desktop_callacks_data(app, cache):
     ## Load latest state & county data 
+    @cache.memoize(timeout=60)
+    def query_data(criteria):
+        if criteria == 'State':
+            dfOBJ = StatesDataFrame()
+            df = dfOBJ.df
+            return df
+        # df = df[df['date'] >= '2020-04-20']
+        # states = dfOBJ.states
+        # df.to_csv('utils/todays_data.csv', index=False)
+        if criteria == 'County':
+            county_dfOBJ = CountiesDataFrame()
+            county_df = county_dfOBJ.df
+            # county_df = county_df[county_df['date'] >= '2020-04-20']
+            # county_df.to_csv('utils/todays_county_data.csv', index=False)
 
-    dfOBJ = StatesDataFrame()
-    df = dfOBJ.df
-    # df = df[df['date'] >= '2020-04-20']
-    # states = dfOBJ.states
-    # df.to_csv('utils/todays_data.csv', index=False)
-    
-    county_dfOBJ = CountiesDataFrame()
-    county_df = county_dfOBJ.df
-    # county_df = county_df[county_df['date'] >= '2020-04-20']
-    # county_df.to_csv('utils/todays_county_data.csv', index=False)
-
+    df = query_data('State')
+    county_df = query_data('County')
 
     ## positive-pct-chart title
     @app.callback(
@@ -88,6 +95,7 @@ def register_desktop_callacks_data(app):
     def daily_stats_callback(state, period, hoverData):
         original_state = state
         try:
+
             county = hoverData["points"][0]["customdata"][0]
             return daily_stats(county, state, period, df, county_df)
         except:
@@ -152,6 +160,7 @@ def register_desktop_callacks_data(app):
         Input('period-slider', 'value'),
         Input('input-on-submit', 'n_clicks'),
         Input('map-criteria', 'value')])
+    @cache.memoize(timeout=60)
     def map_content(state, period, n_clicks, criteria):
         lat, long = 0, 0
         if n_clicks == None:
@@ -183,16 +192,16 @@ def register_desktop_callacks_data(app):
                 return choropleth_mapbox_counties(state, period, county_df, lat, long, criteria)
             
 
-    @app.callback(
-        Output('choropleth_animate', 'children'),
-        [Input('state_picker', 'value'),
-        Input('period-slider', 'value'),
-        Input('map-criteria', 'value')])
-    def map_content(state, period, criteria):
-        if state == 'United States' or state == 'U.S.':
-            return choropleth_mapbox_animate(state, period, df, criteria)
-        else:
-            return None
+    # @app.callback(
+    #     Output('choropleth_animate', 'children'),
+    #     [Input('state_picker', 'value'),
+    #     Input('period-slider', 'value'),
+    #     Input('map-criteria', 'value')])
+    # def map_content(state, period, criteria):
+    #     if state == 'United States' or state == 'U.S.':
+    #         return choropleth_mapbox_animate(state, period, df, criteria)
+    #     else:
+    #         return None
         
 
   
